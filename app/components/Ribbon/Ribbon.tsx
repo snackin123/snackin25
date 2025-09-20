@@ -6,7 +6,7 @@ export default function OfferRibbon() {
     <div className="relative w-full overflow-hidden">
       <div className="relative w-full">
         {/* Fixed height only for 425px, aspect ratio for others */}
-        <div className="relative w-full h-[220px] xs:pt-[100%] sm:pt-[75%] md:pt-[56.25%] lg:pt-[50%] xl:pt-[42.85%]">
+        <div className="relative w-full h-[220px] xs:pt-[100%] sm:pt-[75%] md:pt-[56.25%] lg:pt-[50%] xl:pt-[50%]">
           <Image
             src="/promtional/FestiveCover.avif"
             alt="Festive Banner"
