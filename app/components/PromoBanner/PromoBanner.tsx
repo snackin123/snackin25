@@ -73,7 +73,7 @@ export default function NavratriPromoBanner() {
 
             {/* Day name & date with dynamic color */}
             <p className={`text-lg sm:text-xl md:text-2xl font-semibold mb-3 ${todayDay.textColor}`}>
-              Today: <span className="font-bold">{todayDay.dayName}</span> ({todayDay.date})
+              Navratri <span className="font-bold">{todayDay.dayName}</span> ({todayDay.date})
             </p>
 
             {/* Description */}
