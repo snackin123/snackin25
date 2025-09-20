@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Allow: /images/
+Allow: /public/
+Sitemap:https://www.snackinofficial.com/sitemap.xml

@@ -1,0 +1,43 @@
+/* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root styles for colors and font settings */
+:root {
+    --background: #ffffff;
+    --foreground: #171717;
+    --font-poppins: 'Poppins', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+/* Global body settings */
+body {
+    color: var(--foreground);
+    font-family: var(--font-poppins);
+    margin: 0;
+    padding: 0;
+    background-color: var(--background);
+    line-height: 1.6;
+}
+
+
+
+@keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+  
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
+  }
+
+
+
+
