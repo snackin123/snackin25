@@ -2,6 +2,7 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { CART } from './constants';
 
 export interface CartItem {
   id: string | number;
@@ -37,6 +38,8 @@ interface CartContextType {
   cartValues: {
     subtotal: number;
     shipping: number;
+    discount: number;
+    comboDiscount: number;
     finalTotal: number;
   };
 }
@@ -73,15 +76,26 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       return sum + (price * item.quantity);
     }, 0);
 
-    // Calculate shipping
-    const shipping = 0; // Free shipping by default
-
-    // Calculate final total
-    const finalTotal = subtotal + shipping;
+    // Shipping is now free for all orders
+    const shipping = 0;
+    
+    // Discount offer is currently disabled
+    const discount = 0;
+    
+    // Calculate combo discount (₹100 off for 4+ items)
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const comboDiscount = CART.COMBO_OFFER.ACTIVE && totalItems >= CART.COMBO_OFFER.MIN_ITEMS 
+      ? CART.COMBO_OFFER.DISCOUNT_AMOUNT 
+      : 0;
+    
+    // Calculate final total after applying shipping and discounts
+    const finalTotal = Math.max(0, subtotal + shipping - discount - comboDiscount);
 
     return {
       subtotal,
       shipping,
+      discount,
+      comboDiscount,
       finalTotal
     };
   }, [cart]);

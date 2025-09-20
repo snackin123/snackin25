@@ -24,6 +24,7 @@ export default function CartPage() {
     subtotal,
     discount,
     shipping,
+    comboDiscount,
     finalTotal,
   } = useCartCalculations(cart, cartCount);
   const couponState = useCoupon(subtotal);
@@ -108,6 +109,7 @@ export default function CartPage() {
                 subtotal={subtotal}
                 shipping={shipping}
                 discount={discount}
+                comboDiscount={comboDiscount}
                 finalTotal={finalTotal}
                 cartCount={cartCount}
                 orderPlaced={orderPlaced}

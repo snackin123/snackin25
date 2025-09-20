@@ -9,6 +9,7 @@ interface CartCalculations {
   subtotal: number;
   discount: number;
   shipping: number;
+  comboDiscount: number;
   finalTotal: number;
 }
 
@@ -29,14 +30,20 @@ export const useCartCalculations = (cart: CartItem[], cartCount: number): CartCa
     }, 0);
   }, [cart]);
 
-  // No discounts applied
+  // No order discount applied
   const discount = 0;
 
-  // Flat shipping fee
+  // Flat shipping fee of ₹79 for all orders
   const shipping = CART.SHIPPING_FEE;
+  
+  // Calculate combo discount (₹100 off for 4+ items)
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const comboDiscount = CART.COMBO_OFFER.ACTIVE && totalItems >= CART.COMBO_OFFER.MIN_ITEMS 
+    ? CART.COMBO_OFFER.DISCOUNT_AMOUNT 
+    : 0;
 
   // Calculate final total
-  const finalTotal = subtotal + shipping;
+  const finalTotal = Math.max(0, subtotal + shipping - comboDiscount);
 
   // Update document title
   useEffect(() => {
@@ -60,6 +67,7 @@ export const useCartCalculations = (cart: CartItem[], cartCount: number): CartCa
     subtotal,
     discount,
     shipping,
+    comboDiscount, // Add comboDiscount to the return object
     finalTotal,
   };
 };

@@ -3,20 +3,18 @@
 import { formatPrice } from '@/lib/utils';
 import type { CartItem } from '@/lib/cart-context';
 import { CART } from '@/lib/constants';
-import { useState } from 'react';
-import { SpecialOfferBanner } from './SpecialOfferBanner';
+import { useState } from 'react'; 
 
 interface PriceSummaryProps {
   subtotal: number;
   shipping: number;
   discount: number;
+  comboDiscount: number;
   finalTotal: number;
   cartCount: number;
   orderPlaced: boolean;
   orderDetails: any;
   handleCheckout: () => void;
-  setDiscount?: (value: number) => void;
-  setShipping?: (value: number) => void;
   cartItems: CartItem[];
 }
 
@@ -24,13 +22,12 @@ export const PriceSummary = ({
   subtotal,
   shipping,
   discount,
+  comboDiscount,
   finalTotal,
   cartCount,
   orderPlaced,
   orderDetails,
   handleCheckout,
-  setDiscount = () => {},
-  setShipping = () => {},
   cartItems,
 }: PriceSummaryProps) => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -66,16 +63,25 @@ export const PriceSummary = ({
           </div>
           <span className="font-semibold text-amber-900">{formatPrice(subtotal)}</span>
         </div>
+        {/* Shipping */}
         <div className="flex justify-between text-gray-800">
           <span>Shipping</span>
-          <span>{formatPrice(shipping)}</span>
+          <span>{shipping > 0 ? formatPrice(shipping) : 'Free'}</span>
         </div>
-        {CART.COMBO_OFFER.ACTIVE && totalItems >= CART.COMBO_OFFER.MIN_ITEMS && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-green-600 font-medium">
-              <span>Combo Discount ({CART.COMBO_OFFER.MIN_ITEMS}+ items)</span>
-              <span>-{formatPrice(CART.COMBO_OFFER.DISCOUNT_AMOUNT)}</span>
-            </div>
+        
+        {/* Discounts */}
+        {discount > 0 && (
+          <div className="flex justify-between text-green-600 font-medium">
+            <span>Discount (Orders over ₹299)</span>
+            <span>-{formatPrice(discount)}</span>
+          </div>
+        )}
+        
+        {/* Combo Discount */}
+        {comboDiscount > 0 && (
+          <div className="flex justify-between text-green-600 font-medium">
+            <span>Combo Discount (4+ items)</span>
+            <span>-{formatPrice(comboDiscount)}</span>
           </div>
         )}
         <div className="flex justify-between font-bold text-base mt-3 text-amber-600">
