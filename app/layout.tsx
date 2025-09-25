@@ -10,6 +10,7 @@ import ClientLayout from "./ClientLayout";
 // Import CartProvider
 import { CartProvider } from "@/lib/cart-context";
 import { ReactNode } from 'react';
+import GoogleAnalytics from "@/app/components/GoogleAnalytics";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -62,6 +63,9 @@ const alternateLinks = [
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className={poppins.className}>
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className="antialiased">
         {/* Wrap entire app in CartProvider */}
         <CartProvider>
