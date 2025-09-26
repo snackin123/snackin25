@@ -18,12 +18,13 @@ const navratriDays = [
   { dayName: 'Pratipada', gradientFrom: '#ffffff', gradientTo: '#f1f5f9', button: 'bg-white text-black hover:bg-slate-100', textColor: 'text-black' },
   { dayName: 'Dwitiya', gradientFrom: '#ef4444', gradientTo: '#b91c1c', button: 'bg-red-600 text-white hover:bg-red-700', textColor: 'text-red-600' },
   { dayName: 'Tritiya', gradientFrom: '#2563eb', gradientTo: '#4f46e5', button: 'bg-blue-600 text-white hover:bg-blue-700', textColor: 'text-blue-600' },
-  { dayName: 'Chaturthi', gradientFrom: '#facc15', gradientTo: '#f59e0b', button: 'bg-yellow-400 text-black hover:bg-yellow-500', textColor: 'text-yellow-400' },
-  { dayName: 'Panchami', gradientFrom: '#16a34a', gradientTo: '#059669', button: 'bg-green-600 text-white hover:bg-green-700', textColor: 'text-green-600' },
-  { dayName: 'Shashti', gradientFrom: '#9ca3af', gradientTo: '#6b7280', button: 'bg-gray-500 text-white hover:bg-gray-600', textColor: 'text-gray-500' },
-  { dayName: 'Saptami', gradientFrom: '#f97316', gradientTo: '#dc2626', button: 'bg-orange-500 text-white hover:bg-orange-600', textColor: 'text-orange-500' },
-  { dayName: 'Ashtami', gradientFrom: '#0f766e', gradientTo: '#047857', button: 'bg-emerald-600 text-white hover:bg-emerald-700', textColor: 'text-emerald-600' },
-  { dayName: 'Navami', gradientFrom: '#ec4899', gradientTo: '#db2777', button: 'bg-pink-500 text-white hover:bg-pink-600', textColor: 'text-pink-500' },
+  { dayName: 'Tritiya', gradientFrom: '#facc15', gradientTo: '#f59e0b', button: 'bg-yellow-400 text-black hover:bg-yellow-500', textColor: 'text-yellow-400' },
+  { dayName: 'Chaturthi', gradientFrom: '#16a34a', gradientTo: '#059669', button: 'bg-green-600 text-white hover:bg-green-700', textColor: 'text-green-600' },
+  { dayName: 'Panchami', gradientFrom: '#9ca3af', gradientTo: '#6b7280', button: 'bg-gray-500 text-white hover:bg-gray-600', textColor: 'text-gray-500' },
+  { dayName: 'Shashti', gradientFrom: '#f97316', gradientTo: '#dc2626', button: 'bg-orange-500 text-white hover:bg-orange-600', textColor: 'text-orange-500' },
+  { dayName: 'Saptami', gradientFrom: '#0f766e', gradientTo: '#047857', button: 'bg-emerald-600 text-white hover:bg-emerald-700', textColor: 'text-emerald-600' },
+  { dayName: 'Ashtami', gradientFrom: '#ec4899', gradientTo: '#db2777', button: 'bg-pink-500 text-white hover:bg-pink-600', textColor: 'text-pink-500' },
+  { dayName: 'Navami', gradientFrom: '#8b5cf6', gradientTo: '#6d28d9', button: 'bg-purple-600 text-white hover:bg-purple-700', textColor: 'text-purple-600' },
 ];
 
 // Start date in IST (adjust year if needed)
