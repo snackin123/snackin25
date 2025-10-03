@@ -3,12 +3,12 @@ const CART = {
   // Shipping fees - flat ₹79 for all orders
   SHIPPING_FEE: 79, // Flat ₹79 shipping fee for all orders
   
-  // Combo offer
+  // Combo offer (currently disabled)
   COMBO_OFFER: {
-    ACTIVE: true,
+    ACTIVE: false,
     MIN_ITEMS: 4, // Minimum 4 items required for the offer
-    DISCOUNT_AMOUNT: 100, // ₹100 off for 4+ items
-    DESCRIPTION: '₹100 off on 4+ items'
+    DISCOUNT_AMOUNT: 100,
+    DESCRIPTION: '₹100 off on 4+ items (currently unavailable)'
   },
   
   // Other cart settings

@@ -39,7 +39,7 @@ function getISTDate() {
 
 export default function NavratriPromoBanner() {
   const [dayIndex, setDayIndex] = useState(0);
-  const [demoMode, setDemoMode] = useState(false);
+  const [demoMode, setDemoMode] = useState(true);
 
   // Calculate real date in IST
   useEffect(() => {

@@ -22,7 +22,7 @@ export default function Home() {
       </nav>
       <main className="flex-grow flex flex-col items-center">
         <HeroPage />
-        <OfferRibbon/>
+        {/* <OfferRibbon/> */}
         <WhyChoose />
         <HorizontalScrolling />
         <EndPage />
