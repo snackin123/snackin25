@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
@@ -132,21 +133,23 @@ export default function HeroOffer() {
               transition={{ delay: 0.7 }}
               className="mt-10"
             >
-              <motion.button
-                whileHover={{
-                  scale: 1.06,
-                  boxShadow: '0 0 25px rgba(245, 158, 11, 0.6)',
-                }}
-                whileTap={{ scale: 0.97 }}
-                className="relative bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-gray-900 font-bold px-10 py-4 rounded-full shadow-lg overflow-hidden group transition-all duration-500"
-              >
-                <span className="relative z-10 flex items-center justify-center italic">
-                  <FireworkIcon />
-                  <span className="mx-2">Shop Diwali Combo</span>
-                  <FireworkIcon />
-                </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </motion.button>
+              <Link href="/products" className="inline-block">
+                <motion.button
+                  whileHover={{
+                    scale: 1.06,
+                    boxShadow: '0 0 25px rgba(245, 158, 11, 0.6)',
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  className="relative bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-gray-900 font-bold px-10 py-4 rounded-full shadow-lg overflow-hidden group transition-all duration-500"
+                >
+                  <span className="relative z-10 flex items-center justify-center italic">
+                    <FireworkIcon />
+                    <span className="mx-2">Shop Diwali Combo</span>
+                    <FireworkIcon />
+                  </span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.button>
+              </Link>
             </motion.div>
           </>
         ) : (
