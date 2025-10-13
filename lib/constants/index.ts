@@ -3,12 +3,12 @@ const CART = {
   // Shipping fees - flat ₹79 for all orders
   SHIPPING_FEE: 79, // Flat ₹79 shipping fee for all orders
   
-  // Combo offer (currently disabled)
+  // Combo offer (now enabled for Diwali promotion)
   COMBO_OFFER: {
-    ACTIVE: false,
+    ACTIVE: true,
     MIN_ITEMS: 4, // Minimum 4 items required for the offer
     DISCOUNT_AMOUNT: 100,
-    DESCRIPTION: '₹100 off on 4+ items (currently unavailable)'
+    DESCRIPTION: '₹100 off on 4+ items - Diwali Special!'
   },
   
   // Other cart settings

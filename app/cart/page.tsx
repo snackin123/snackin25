@@ -9,6 +9,7 @@ import { useCoupon } from '@/hooks/useCoupon';
 import { CartItem } from './component/CartItem';
 import { PriceSummary } from './component/PriceSummary';
 import { CheckoutModal } from './component/CheckoutModal';
+import { SpecialOfferBanner } from './component/SpecialOfferBanner';
 // import { SpecialOfferBanner } from './component/SpecialOfferBanner';
 
 export default function CartPage() {
@@ -103,7 +104,7 @@ export default function CartPage() {
             </div>
           </div>
           <div className="lg:col-span-1 space-y-4 sticky top-28">
-            {/* <SpecialOfferBanner itemCount={cartCount} minPacketsForDiscount={4} /> */}
+            <SpecialOfferBanner itemCount={cartCount} minPacketsForDiscount={4} />
             <div className="lg:col-span-1">
               <PriceSummary
                 subtotal={subtotal}

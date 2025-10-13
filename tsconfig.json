@@ -42,7 +42,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "app/components/Ribbon/Ribbon.tsx"
+    "app/components/PromoBanner/HeroOffer/HeroOffer.tsx"
   ],
   "exclude": [
     "node_modules"
