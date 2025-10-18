@@ -41,7 +41,8 @@ export const products: Product[] = [
     "category": "Paan",
     "color": "#63BF7E",
     "image": "Images/Plastic_Pouch_1.avif",
-    "hoverImage": "Images/bg-Paan Flavoured Raisins.avif"
+    "hoverImage": "Images/bg-Paan Flavoured Raisins.avif",
+    "inStock": false
   },
   {
     "id": "3",
@@ -52,7 +53,8 @@ export const products: Product[] = [
     "category": "Rose",
     "color": "#F081B4",
     "image": "Images/Plastic_Pouch_2.avif",
-    "hoverImage": "Images/bg-Rose Flavoured Raisins.avif"
+    "hoverImage": "Images/bg-Rose Flavoured Raisins.avif",
+    "inStock": false
   },
   {
     "id": "4",

@@ -163,14 +163,20 @@ const ProductsContent = () => {
 
                     <button
                       onClick={() => handleAddToCart(product)}
-                      disabled={!!addedToCart[product.id]}
+                      disabled={!!addedToCart[product.id] || product.inStock === false}
                       className={`w-full md:w-auto px-4 py-2 text-sm sm:text-base rounded-full font-semibold transition-all duration-300 ${
-                        addedToCart[product.id]
+                        product.inStock === false
+                          ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                          : addedToCart[product.id]
                           ? 'bg-green-600 text-white'
                           : 'bg-amber-500 text-red-900 hover:bg-amber-400'
                       }`}
                     >
-                      {addedToCart[product.id] ? 'Added!' : 'Add to Cart'}
+                      {product.inStock === false 
+                        ? 'Out of Stock' 
+                        : addedToCart[product.id] 
+                        ? 'Added!' 
+                        : 'Add to Cart'}
                     </button>
                   </div>
                 </div>
