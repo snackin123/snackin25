@@ -4,7 +4,7 @@ import { useCart } from '@/lib/cart-context';
 import { products as allProducts, Product } from '@/lib/data/products';
 import Image from 'next/image';
 import { useState } from 'react';
-import DiwaliPromoBanner from '../components/PromoBanner/productBanner/ProductBanner';
+// import DiwaliPromoBanner from '../components/PromoBanner/productBanner/ProductBanner';
 
 const ProductsContent = () => {
   const [products] = useState<Product[]>(allProducts);
@@ -98,7 +98,7 @@ const ProductsContent = () => {
     <div className="bg-[#FFFDF9] min-h-screen py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-10">
-          <DiwaliPromoBanner />
+          {/* <DiwaliPromoBanner /> */}
         </div>
 
         <h1 className="text-4xl font-extrabold text-center mb-12 text-red-900">
