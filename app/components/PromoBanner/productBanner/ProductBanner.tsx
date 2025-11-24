@@ -24,8 +24,9 @@ const SnackinPromoBanner = () => {
   useEffect(() => {
     const checkOfferValidity = () => {
       const now = new Date();
-      const offerStartDate = new Date(2025, 9, 13);
-      const offerEndDate = new Date(2025, 9, 23);
+      // Black Friday 2025 - November 24th (Black Friday) through Cyber Monday
+      const offerStartDate = new Date(2025, 10, 24); // November 24, 2025
+      const offerEndDate = new Date(2025, 10, 30);   // November 30, 2025
       setIsOfferActive(now >= offerStartDate && now <= offerEndDate);
     };
     checkOfferValidity();
@@ -108,8 +109,9 @@ const SnackinPromoBanner = () => {
             transition={{ delay: 0.4 }}
             className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed font-medium italic"
           >
-            Buy <span className="font-bold">2 or more Snackin' items</span> and get <span className="text-yellow-200 font-semibold">2 absolutely FREE</span> <br />
-            <span className="text-yellow-300">(Buy 2 Get 2 FREE - Biggest sale of the year!)</span>
+            Buy <span className="font-bold text-yellow-200">2 or more Snackin' items</span> and get <span className="text-yellow-200 font-bold">2 absolutely FREE</span> <br />
+            <span className="text-yellow-300">Choose your free items from our special selection!</span> <br />
+            <span className="text-green-300">(Limited time offer - Save up to ₹258!)</span>
           </motion.p>
 
           {/* Interactive CTA Card */}
@@ -151,12 +153,12 @@ const SnackinPromoBanner = () => {
                 
                 {/* Headline */}
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-yellow-300 transition-colors duration-300">
-                  Unlock Your Black Friday Deal
+                  Choose Your FREE Items Now!
                 </h3>
                 
                 {/* Subtitle */}
                 <p className="text-red-200 text-sm md:text-base mb-6 font-medium">
-                  Limited Time: Buy 2 Get 2 FREE on All Snackin' Products
+                  Buy 2 Get 2 FREE - Select from Chocolate, Cranberry, Chatpata & Spicy Chilli Guava
                 </p>  
                 {/* Trust indicators */}
                 <div className="flex justify-center gap-4 mt-6 text-xs text-red-300">

@@ -4,6 +4,8 @@ import { useCart } from '@/lib/cart-context';
 import { ShoppingCart, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Gift, X } from 'lucide-react';
 import { useCartCalculations } from '@/hooks/useCartCalculations';
 import { useCoupon } from '@/hooks/useCoupon';
 import { CartItem } from './component/CartItem';
@@ -17,6 +19,7 @@ export default function CartPage() {
   const [showModal, setShowModal] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState<'cart' | 'contact' | 'address' | 'summary' | 'payment'>('cart');
   const [selectedFreeItems, setSelectedFreeItems] = useState<string[]>([]);
+  const [showFreeItemNotification, setShowFreeItemNotification] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
@@ -40,14 +43,25 @@ export default function CartPage() {
   }, []);
 
   const handleCheckout = () => {
-    // Simplified; move detailed logic to CheckoutModal or a separate hook
+    // Check if user is eligible for free items but hasn't selected them
+    const isEligibleForFreeItems = cartCount >= 2;
+    const hasSelectedFreeItems = selectedFreeItems.length === 2;
+    
+    if (isEligibleForFreeItems && !hasSelectedFreeItems) {
+      // Show notification and trigger free item selector
+      setShowFreeItemNotification(true);
+      // Auto-hide notification after 4 seconds
+      setTimeout(() => setShowFreeItemNotification(false), 4000);
+      return;
+    }
+    
+    // Proceed with normal checkout
     if (checkoutStep === 'cart') {
       setShowModal(true);
       setCheckoutStep('contact');
     } else if (orderPlaced && orderDetails) {
       window.location.href = `/order-tracking?order_id=${orderDetails.razorpay_order_id}&email=${encodeURIComponent(orderDetails.customerEmail)}`;
     }
-    // Further steps handled in CheckoutModal
   };
 
   if (!isClient) {
@@ -151,6 +165,38 @@ export default function CartPage() {
           clearCart={clearCart}
           freeItems={selectedFreeItems}
         />
+      )}
+      
+      {/* Free Item Notification */}
+      {showFreeItemNotification && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-sm bg-gradient-to-r from-red-600 to-black text-white rounded-lg shadow-2xl p-4 z-50 border border-red-500/30"
+        >
+          <div className="flex items-start gap-3">
+            <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300 flex-shrink-0 mt-1" />
+            <div className="flex-1 min-w-0">
+              <h4 className="font-bold text-yellow-300 mb-1 text-sm sm:text-base">🎁 Don't Miss Your FREE Items!</h4>
+              <p className="text-xs sm:text-sm text-red-100">
+                You're eligible for 2 free items worth ₹258! Select them above before checkout.
+              </p>
+              <button
+                onClick={() => setShowFreeItemNotification(false)}
+                className="mt-2 text-xs text-red-200 hover:text-white transition-colors underline"
+              >
+                Got it, thanks!
+              </button>
+            </div>
+            <button
+              onClick={() => setShowFreeItemNotification(false)}
+              className="text-red-300 hover:text-white transition-colors flex-shrink-0 p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </motion.div>
       )}
     </div>
   );
