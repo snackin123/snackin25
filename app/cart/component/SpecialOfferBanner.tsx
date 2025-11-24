@@ -7,7 +7,6 @@ interface SpecialOfferBannerProps {
   itemCount: number;
   minPacketsForDiscount?: number;
   onFreeItemsSelected?: (selectedItems: string[]) => void;
-  triggerFreeItemSelector?: () => void; // Add prop to trigger selector
 }
 
 const ProgressBar = ({ progress, isEligible }: { progress: number; isEligible: boolean }) => (
@@ -28,8 +27,7 @@ const ProgressBar = ({ progress, isEligible }: { progress: number; isEligible: b
 export const SpecialOfferBanner = ({ 
   itemCount, 
   minPacketsForDiscount = 2,
-  onFreeItemsSelected,
-  triggerFreeItemSelector
+  onFreeItemsSelected
 }: SpecialOfferBannerProps) => {
   const [showFreeItemSelector, setShowFreeItemSelector] = useState(false);
   const [autoPopupShown, setAutoPopupShown] = useState(false);
@@ -37,13 +35,6 @@ export const SpecialOfferBanner = ({
   const [currentFreeItems, setCurrentFreeItems] = useState<string[]>([]);
   const prevItemCountRef = useRef(itemCount);
   const prevFreeItemsSelectedRef = useRef(freeItemsSelected);
-  
-  // Handle external trigger to show free item selector
-  useEffect(() => {
-    if (triggerFreeItemSelector && isEligible && !freeItemsSelected) {
-      setShowFreeItemSelector(true);
-    }
-  }, [triggerFreeItemSelector, isEligible, freeItemsSelected]);
   
   // Reset free items selection if cart count drops below minimum or becomes eligible again
   useEffect(() => {
@@ -195,18 +186,90 @@ export const SpecialOfferBanner = ({
 
                   {/* Always show selector button - allow users to change their selection */}
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                    animate={
+                      !freeItemsSelected ? {
+                        scale: [1, 1.05, 1],
+                        y: [0, -1, 0],
+                        boxShadow: [
+                          "0 0 0 0 rgba(239, 68, 68, 0.8)",
+                          "0 0 0 15px rgba(239, 68, 68, 0)",
+                          "0 0 0 0 rgba(239, 68, 68, 0)"
+                        ],
+                        background: [
+                          "linear-gradient(to right, rgb(220, 38, 38), rgb(0, 0, 0))",
+                          "linear-gradient(to right, rgb(239, 68, 68), rgb(17, 24, 39))",
+                          "linear-gradient(to right, rgb(220, 38, 38), rgb(0, 0, 0))"
+                        ]
+                      } : {}
+                    }
+                    transition={{
+                      duration: 2,
+                      repeat: !freeItemsSelected ? Infinity : 0,
+                      ease: "easeInOut"
+                    }}
                     onClick={handleSelectFreeItems}
-                    className="w-full px-3 sm:px-4 py-2 bg-gradient-to-r from-red-600 to-black text-white rounded-lg font-medium text-xs sm:text-sm hover:from-red-700 hover:to-gray-900 transition-all flex items-center justify-center gap-2"
+                    className={`w-full px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 relative overflow-hidden ${
+                      freeItemsSelected 
+                        ? 'bg-gradient-to-r from-gray-600 to-gray-800 text-white hover:from-gray-700 hover:to-gray-900' 
+                        : 'bg-gradient-to-r from-red-600 to-black text-white hover:from-red-700 hover:to-gray-900'
+                    }`}
                   >
-                    <Gift className="w-4 h-4" />
-                    <span className="hidden sm:inline">
+                    {/* Animated background shine effect */}
+                    {!freeItemsSelected && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        animate={{
+                          x: ['-100%', '100%']
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    )}
+                    
+                    {/* Pulsing gift icon */}
+                    <motion.div
+                      animate={
+                        !freeItemsSelected ? {
+                          rotate: [0, 5, -5, 0],
+                          scale: [1, 1.1, 1]
+                        } : {}
+                      }
+                      transition={{
+                        duration: 1.5,
+                        repeat: !freeItemsSelected ? Infinity : 0,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <Gift className="w-4 h-4" />
+                    </motion.div>
+                    
+                    <span className="hidden sm:inline relative z-10">
                       {freeItemsSelected ? 'Change Your FREE Items' : 'Select Your 2 FREE Items'}
                     </span>
-                    <span className="sm:hidden">
+                    <span className="sm:hidden relative z-10">
                       {freeItemsSelected ? 'Change FREE Items' : 'Select 2 FREE Items'}
                     </span>
+                    
+                    {/* Urgency indicator */}
+                    {!freeItemsSelected && (
+                      <motion.div
+                        className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"
+                        animate={{
+                          scale: [1, 1.3, 1],
+                          opacity: [1, 0.7, 1]
+                        }}
+                        transition={{
+                          duration: 1,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    )}
                   </motion.button>
                 </motion.div>
               )}
