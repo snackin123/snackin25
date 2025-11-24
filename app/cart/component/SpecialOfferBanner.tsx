@@ -33,6 +33,25 @@ export const SpecialOfferBanner = ({
   const [autoPopupShown, setAutoPopupShown] = useState(false);
   const [freeItemsSelected, setFreeItemsSelected] = useState(false);
   const [currentFreeItems, setCurrentFreeItems] = useState<string[]>([]);
+  // Reset free items selection if cart count drops below minimum or becomes eligible again
+  useEffect(() => {
+    if (itemCount < minPacketsForDiscount) {
+      // User lost eligibility - clear everything
+      setFreeItemsSelected(false);
+      setCurrentFreeItems([]);
+      setShowFreeItemSelector(false);
+      setAutoPopupShown(false); // Reset auto-popup so it can trigger again
+      // Notify parent component that free items are cleared
+      if (onFreeItemsSelected) {
+        onFreeItemsSelected([]);
+      }
+    } else if (itemCount >= minPacketsForDiscount && !freeItemsSelected) {
+      // User became eligible again but hasn't selected items yet
+      // Reset auto-popup to allow it to trigger again
+      setAutoPopupShown(false);
+    }
+  }, [itemCount, minPacketsForDiscount, freeItemsSelected, onFreeItemsSelected]);
+  
   const progress = Math.min(100, (itemCount / minPacketsForDiscount) * 100);
   const packetsNeeded = Math.max(0, minPacketsForDiscount - itemCount);
   const isEligible = itemCount >= minPacketsForDiscount;

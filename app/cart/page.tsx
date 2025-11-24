@@ -24,8 +24,12 @@ export default function CartPage() {
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
 
-  const handleFreeItemsSelected = (freeItems: string[]) => {
-    setSelectedFreeItems(freeItems);
+  const handleFreeItemsSelected = (selectedItems: string[]) => {
+    setSelectedFreeItems(selectedItems);
+    // If free items are cleared (empty array), hide any notification
+    if (selectedItems.length === 0) {
+      setShowFreeItemNotification(false);
+    }
   };
 
   const {
