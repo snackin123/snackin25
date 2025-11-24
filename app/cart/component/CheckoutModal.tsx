@@ -239,10 +239,16 @@ export const CheckoutModal = ({
           },
           notes: { 
             source: 'snackin_web_checkout', 
-            cart_items: JSON.stringify(cartItems), 
-            address: JSON.stringify(addressDetails),
-            free_items: JSON.stringify(freeItems),
-            free_items_count: freeItems.length.toString()
+            customer_email: contactDetails.email,
+            customer_name: contactDetails.name,
+            customer_phone: contactDetails.mobile,
+            order_total: `₹${finalTotal}`,
+            cart_items: cartItems.map(item => `${item.quantity}x ${item.name} - ₹${item.price * item.quantity}`).join(', '),
+            cart_summary: `${cartItems.length} item(s) - ₹${subtotal}`,
+            shipping_address: `${addressDetails.line1}, ${addressDetails.city}, ${addressDetails.state} - ${addressDetails.pincode}`,
+            free_items_count: freeItems.length.toString(),
+            free_items_value: freeItems.length > 0 ? `₹${freeItems.length * 129}` : '₹0',
+            created_at: new Date().toISOString()
           },
           retry: { enabled: true, max_count: 4 },
           timeout: 900,
