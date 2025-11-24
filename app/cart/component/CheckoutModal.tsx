@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useCallback, useRef } from 'react';
@@ -100,6 +99,13 @@ export const CheckoutModal = ({
     } catch {
       return false;
     }
+  };
+
+  const getFreeItemNames = (freeItemIds: string[]): string => {
+    return freeItemIds.map(id => {
+      const product = allProducts.find(p => p.id === id);
+      return product ? product.name : 'Free Item';
+    }).join(', ');
   };
 
   const handleCheckout = async () => {
@@ -248,6 +254,7 @@ export const CheckoutModal = ({
             shipping_address: `${addressDetails.line1}, ${addressDetails.city}, ${addressDetails.state} - ${addressDetails.pincode}`,
             free_items_count: freeItems.length.toString(),
             free_items_value: freeItems.length > 0 ? `₹${freeItems.length * 129}` : '₹0',
+            free_items_names: getFreeItemNames(freeItems),
             created_at: new Date().toISOString()
           },
           retry: { enabled: true, max_count: 4 },
