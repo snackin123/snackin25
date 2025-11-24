@@ -158,7 +158,7 @@ const SnackinPromoBanner = () => {
                 
                 {/* Subtitle */}
                 <p className="text-red-200 text-sm md:text-base mb-6 font-medium">
-                  Buy 2 Get 2 FREE - Select from Chocolate, Cranberry, Chatpata & Spicy Chilli Guava
+                  Buy 2 Get 2 FREE - Select free items on checkout
                 </p>  
                 {/* Trust indicators */}
                 <div className="flex justify-center gap-4 mt-6 text-xs text-red-300">
