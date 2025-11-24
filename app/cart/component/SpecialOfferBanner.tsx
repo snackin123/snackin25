@@ -7,6 +7,7 @@ interface SpecialOfferBannerProps {
   itemCount: number;
   minPacketsForDiscount?: number;
   onFreeItemsSelected?: (selectedItems: string[]) => void;
+  triggerFreeItemSelector?: () => void; // Add prop to trigger selector
 }
 
 const ProgressBar = ({ progress, isEligible }: { progress: number; isEligible: boolean }) => (
@@ -27,7 +28,8 @@ const ProgressBar = ({ progress, isEligible }: { progress: number; isEligible: b
 export const SpecialOfferBanner = ({ 
   itemCount, 
   minPacketsForDiscount = 2,
-  onFreeItemsSelected
+  onFreeItemsSelected,
+  triggerFreeItemSelector
 }: SpecialOfferBannerProps) => {
   const [showFreeItemSelector, setShowFreeItemSelector] = useState(false);
   const [autoPopupShown, setAutoPopupShown] = useState(false);
@@ -35,6 +37,13 @@ export const SpecialOfferBanner = ({
   const [currentFreeItems, setCurrentFreeItems] = useState<string[]>([]);
   const prevItemCountRef = useRef(itemCount);
   const prevFreeItemsSelectedRef = useRef(freeItemsSelected);
+  
+  // Handle external trigger to show free item selector
+  useEffect(() => {
+    if (triggerFreeItemSelector && isEligible && !freeItemsSelected) {
+      setShowFreeItemSelector(true);
+    }
+  }, [triggerFreeItemSelector, isEligible, freeItemsSelected]);
   
   // Reset free items selection if cart count drops below minimum or becomes eligible again
   useEffect(() => {

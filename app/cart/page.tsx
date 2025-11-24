@@ -23,6 +23,7 @@ export default function CartPage() {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
+  const [triggerFreeItemSelector, setTriggerFreeItemSelector] = useState(0);
 
   const handleFreeItemsSelected = useCallback((selectedItems: string[]) => {
     setSelectedFreeItems(selectedItems);
@@ -52,10 +53,9 @@ export default function CartPage() {
     const hasSelectedFreeItems = selectedFreeItems.length === 2;
     
     if (isEligibleForFreeItems && !hasSelectedFreeItems) {
-      // Show notification and trigger free item selector
-      setShowFreeItemNotification(true);
-      // Auto-hide notification after 4 seconds
-      setTimeout(() => setShowFreeItemNotification(false), 4000);
+      // Always show free item selector when checkout is clicked
+      setShowFreeItemNotification(false); // Hide notification
+      setTriggerFreeItemSelector(prev => prev + 1); // Trigger the selector
       return;
     }
     
@@ -133,6 +133,7 @@ export default function CartPage() {
               itemCount={cartCount} 
               minPacketsForDiscount={2} 
               onFreeItemsSelected={handleFreeItemsSelected}
+              triggerFreeItemSelector={triggerFreeItemSelector}
             />
             <div className="lg:col-span-1">
               <PriceSummary
