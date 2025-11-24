@@ -1,14 +1,15 @@
 // Cart related constants
 const CART = {
-  // Shipping fees - flat ₹79 for all orders
-  SHIPPING_FEE: 79, // Flat ₹79 shipping fee for all orders
+  // Shipping fees - flat ₹99 for all orders
+  SHIPPING_FEE: 99, // Flat ₹99 shipping fee for all orders
   
-  // Combo offer (now enabled for Diwali promotion)
+  // Combo offer (Black Friday Mega Sale - Buy 2 Get 2 Free, mandatory 2 items)
   COMBO_OFFER: {
     ACTIVE: true,
-    MIN_ITEMS: 4, // Minimum 4 items required for the offer
-    DISCOUNT_AMOUNT: 100,
-    DESCRIPTION: '₹100 off on 4+ items - Diwali Special!'
+    MIN_ITEMS: 2, // Mandatory minimum 2 items to activate Buy 2 Get 2 Free
+    DISCOUNT_AMOUNT: 0, // Free items instead of discount
+    FREE_ITEMS: 0, // Calculated as min(2, floor(totalItems/2))
+    DESCRIPTION: 'Buy 2 Get 2 Free - Must buy 2 items to activate!'
   },
   
   // Other cart settings

@@ -36,11 +36,18 @@ export const useCartCalculations = (cart: CartItem[], cartCount: number): CartCa
   // Flat shipping fee of ₹79 for all orders
   const shipping = CART.SHIPPING_FEE;
   
-  // Calculate combo discount (₹100 off for 4+ items)
+  // Calculate Black Friday combo discount (Buy 2 Get 2 FREE - Select 2 free items)
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const comboDiscount = CART.COMBO_OFFER.ACTIVE && totalItems >= CART.COMBO_OFFER.MIN_ITEMS 
-    ? CART.COMBO_OFFER.DISCOUNT_AMOUNT 
-    : 0;
+  let comboDiscount = 0;
+  
+  if (CART.COMBO_OFFER.ACTIVE && totalItems >= CART.COMBO_OFFER.MIN_ITEMS) {
+    // For Buy 2 Get 2 FREE: User can select 2 free items from our inventory
+    // NO DISCOUNT APPLIED TO PRICE - just showing offer value for display
+    const freeItemsCount = Math.min(2, Math.floor(totalItems / 2)); // Get 2 free items max
+    
+    // Show value of free items for display only (NO actual discount applied)
+    comboDiscount = 0; // No price reduction - just free items added separately
+  }
 
   // Calculate final total
   const finalTotal = Math.max(0, subtotal + shipping - comboDiscount);

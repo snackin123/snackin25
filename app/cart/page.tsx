@@ -10,15 +10,19 @@ import { CartItem } from './component/CartItem';
 import { PriceSummary } from './component/PriceSummary';
 import { CheckoutModal } from './component/CheckoutModal';
 import { SpecialOfferBanner } from './component/SpecialOfferBanner';
-// import { SpecialOfferBanner } from './component/SpecialOfferBanner';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, cartCount } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState<'cart' | 'contact' | 'address' | 'summary' | 'payment'>('cart');
+  const [selectedFreeItems, setSelectedFreeItems] = useState<string[]>([]);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
+
+  const handleFreeItemsSelected = (freeItems: string[]) => {
+    setSelectedFreeItems(freeItems);
+  };
 
   const {
     deduplicatedCart,
@@ -82,6 +86,8 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-[#FFFDF9] pt-24 px-4 sm:px-6 lg:px-8 pb-12">
       <div className="max-w-6xl mx-auto">
+        {/* Black Friday Banner */}
+
         <h1 className="text-3xl font-bold mb-10 text-center text-red-900 mt-6">Your Shopping Cart</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
@@ -104,7 +110,11 @@ export default function CartPage() {
             </div>
           </div>
           <div className="lg:col-span-1 space-y-4 sticky top-28">
-            <SpecialOfferBanner itemCount={cartCount} minPacketsForDiscount={4} />
+            <SpecialOfferBanner 
+              itemCount={cartCount} 
+              minPacketsForDiscount={2} 
+              onFreeItemsSelected={handleFreeItemsSelected}
+            />
             <div className="lg:col-span-1">
               <PriceSummary
                 subtotal={subtotal}
@@ -117,6 +127,7 @@ export default function CartPage() {
                 orderDetails={orderDetails}
                 handleCheckout={handleCheckout}
                 cartItems={deduplicatedCart}
+                freeItems={selectedFreeItems}
               />
             </div>
           </div>
@@ -133,10 +144,11 @@ export default function CartPage() {
           discount={discount}
           shipping={shipping}
           finalTotal={finalTotal}
-          couponState={couponState}  // Add this line
+          couponState={couponState}
           setOrderPlaced={setOrderPlaced}
           setOrderDetails={setOrderDetails}
           clearCart={clearCart}
+          freeItems={selectedFreeItems}
         />
       )}
     </div>

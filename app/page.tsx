@@ -7,6 +7,7 @@ const HorizontalScrolling = dynamic(() => import("./components/HorizontalScrolli
 const EndPage = dynamic(() => import("./components/EndPage/EndPage"), { ssr: false });
 const HeroOffer = dynamic(() => import("./components/PromoBanner/HeroOffer/HeroOffer"), { ssr: false });
 const CustomerReviewsRibbon = dynamic(() => import("./components/CustomerReviewsRibbon/CustomerReviewsRibbon"), { ssr: false });
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen relative">

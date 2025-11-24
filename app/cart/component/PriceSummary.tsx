@@ -4,6 +4,8 @@ import { formatPrice } from '@/lib/utils';
 import type { CartItem } from '@/lib/cart-context';
 import { CART } from '@/lib/constants';
 import { useState } from 'react'; 
+import { Gift } from 'lucide-react';
+import { products as allProducts } from '@/lib/data/products';
 
 interface PriceSummaryProps {
   subtotal: number;
@@ -16,6 +18,7 @@ interface PriceSummaryProps {
   orderDetails: any;
   handleCheckout: () => void;
   cartItems: CartItem[];
+  freeItems?: string[]; // Add free items prop
 }
 
 export const PriceSummary = ({
@@ -29,6 +32,7 @@ export const PriceSummary = ({
   orderDetails,
   handleCheckout,
   cartItems,
+  freeItems = [],
 }: PriceSummaryProps) => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -77,11 +81,40 @@ export const PriceSummary = ({
           </div>
         )}
         
-        {/* Combo Discount */}
+        {/* Black Friday Combo Discount */}
         {comboDiscount > 0 && (
           <div className="flex justify-between text-green-600 font-medium">
-            <span>Combo Discount (4+ items)</span>
+            <span>Black Friday Deal (Buy 2 Get 2 FREE)</span>
             <span>-{formatPrice(comboDiscount)}</span>
+          </div>
+        )}
+        
+        {/* Free Items Display */}
+        {freeItems.length > 0 && (
+          <div className="flex justify-between text-green-600 font-medium">
+            <div className="flex items-center gap-2">
+              <Gift className="w-4 h-4" />
+              <span>Free Items ({freeItems.length})</span>
+            </div>
+            <span className="text-green-600 font-semibold">FREE</span>
+          </div>
+        )}
+        
+        {/* Free Items List */}
+        {freeItems.length > 0 && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+            <p className="text-xs font-medium text-green-800 mb-2">Your FREE items:</p>
+            <div className="space-y-1">
+              {freeItems.map((itemId, index) => {
+                const product = allProducts.find((p: any) => p.id === itemId);
+                return product ? (
+                  <div key={itemId} className="flex justify-between items-center text-xs">
+                    <span className="text-green-700">{index + 1}. {product.name}</span>
+                    <span className="text-green-600 font-semibold line-through">{product.originalPrice}</span>
+                  </div>
+                ) : null;
+              })}
+            </div>
           </div>
         )}
         <div className="flex justify-between font-bold text-base mt-3 text-amber-600">

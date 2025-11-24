@@ -20,7 +20,7 @@ export default function HeroOffer() {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isOfferActive, setIsOfferActive] = useState(true);
 
-  const imageSrc = '/promtional/Diwali.png';
+  const imageSrc = '/promtional/BlackFriday.png';
   const placeholderImage =
     'data:image/svg+xml;base64,PHN2dyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxYzFlMjEiLz48L3N2Zz4=';
 
@@ -28,8 +28,8 @@ export default function HeroOffer() {
   useEffect(() => {
     const checkOfferValidity = () => {
       const now = new Date();
-      const offerStartDate = new Date(2025, 9, 13);
-      const offerEndDate = new Date(2025, 9, 23);
+      const offerStartDate = new Date(2025, 10, 20); // November 20, 2025
+      const offerEndDate = new Date(2025, 10, 30); // November 30, 2025
       setIsOfferActive(now >= offerStartDate && now <= offerEndDate);
     };
     checkOfferValidity();
@@ -70,108 +70,37 @@ export default function HeroOffer() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 max-w-4xl mx-auto text-center px-6 pt-32 pb-10 md:pt-48 md:pb-20"
+        className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 pt-20 sm:pt-24 md:pt-32 lg:pt-48 pb-6 sm:pb-8 md:pb-10 lg:pb-20 flex flex-col justify-end min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] lg:min-h-[85vh]"
       >
-        {isOfferActive ? (
-          <>
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="uppercase tracking-[0.2em] text-yellow-200 font-semibold italic text-sm md:text-base mb-2"
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex justify-center px-2 sm:px-4"
+        >
+          <Link href="/products" className="inline-block">
+            <motion.button
+              whileHover={{
+                scale: 1.06,
+                boxShadow: '0 0 25px rgba(245, 158, 11, 0.6)',
+              }}
+              whileTap={{ scale: 0.97 }}
+              className="relative bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-gray-900 font-bold px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full shadow-lg overflow-hidden group transition-all duration-500 text-sm sm:text-base md:text-lg"
             >
-              Diwali Special
-            </motion.p>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-2 drop-shadow-xl"
-            >
-              <span className="block font-['Tangerine'] italic text-yellow-300 text-6xl md:text-8xl">
-                Diwali Delights
+              <span className="relative z-10 flex items-center justify-center italic">
+                <FireworkIcon />
+                <span className="mx-1 sm:mx-2">Unlock Your Black Friday Deal</span>
+                <FireworkIcon />
               </span>
-              <span className="block font-['Dancing_Script'] italic text-3xl md:text-4xl text-yellow-200 mt-2">
-                with snackin&apos;
-              </span>
-            </motion.h1>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-xl md:text-2xl text-yellow-100 font-semibold italic mb-6"
-            >
-              Celebrate & Save this festive season!
-            </motion.h2>
-
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.5, type: 'spring', stiffness: 180 }}
-              className="inline-block bg-gradient-to-r from-amber-500 via-red-500 to-pink-500 px-8 py-3 rounded-full text-lg font-bold text-white shadow-xl hover:scale-105 transition-transform duration-300"
-            >
-              ₹100 OFF on 4+ Packs
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto mt-6 font-medium italic"
-            >
-              Buy <span className="text-yellow-200 font-semibold">4 or more</span>{' '}
-              snack packs and enjoy <span className="text-yellow-300">₹100 OFF</span> - our
-              little Diwali gift to you! 🎁
-            </motion.p>
-
-            {/* CTA Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="mt-10"
-            >
-              <Link href="/products" className="inline-block">
-                <motion.button
-                  whileHover={{
-                    scale: 1.06,
-                    boxShadow: '0 0 25px rgba(245, 158, 11, 0.6)',
-                  }}
-                  whileTap={{ scale: 0.97 }}
-                  className="relative bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-gray-900 font-bold px-10 py-4 rounded-full shadow-lg overflow-hidden group transition-all duration-500"
-                >
-                  <span className="relative z-10 flex items-center justify-center italic">
-                    <FireworkIcon />
-                    <span className="mx-2">Shop Diwali Combo</span>
-                    <FireworkIcon />
-                  </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </motion.button>
-              </Link>
-            </motion.div>
-          </>
-        ) : (
-          // 💫 Pre-offer State
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6 text-white"
-          >
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-2">Offer Coming Soon! ✨</h1>
-            <p className="text-lg md:text-xl text-gray-200">
-              Stay tuned for festive savings and exclusive Diwali offers!
-            </p>
-            <button className="mt-6 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3 rounded-full border border-white/20 backdrop-blur-sm transition-all duration-300">
-              Notify Me
-            </button>
-          </motion.div>
-        )}
+              <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.button>
+          </Link>
+        </motion.div>
       </motion.div>
 
       {/* ✨ Floating Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 opacity-80">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 opacity-80">
         {[...Array(3)].map((_, i) => (
           <div key={i} className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
         ))}
