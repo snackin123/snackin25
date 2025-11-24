@@ -5,7 +5,7 @@ const HeroPage = dynamic(() => import("./components/HeroPage/HeroPage"), { ssr: 
 const WhyChoose = dynamic(() => import("./components/WhyChoose/WhyChoose"), { ssr: false });
 const HorizontalScrolling = dynamic(() => import("./components/HorizontalScrolling/HorizontalScrolling"), { ssr: false });
 const EndPage = dynamic(() => import("./components/EndPage/EndPage"), { ssr: false });
-const HeroOffer = dynamic(() => import("./components/PromoBanner/HeroOffer/HeroOffer"), { ssr: false });
+// const HeroOffer = dynamic(() => import("./components/PromoBanner/HeroOffer/HeroOffer"), { ssr: false });
 const CustomerReviewsRibbon = dynamic(() => import("./components/CustomerReviewsRibbon/CustomerReviewsRibbon"), { ssr: false });
 
 export default function Home() {
@@ -22,8 +22,8 @@ export default function Home() {
         />
       </nav>
       <main className="flex-grow flex flex-col items-center">
-        {/* <HeroPage /> */}
-        <HeroOffer/>
+        <HeroPage />
+        {/* <HeroOffer/> */}
         <WhyChoose />
         <HorizontalScrolling />
         <EndPage />

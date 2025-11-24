@@ -11,6 +11,7 @@ import { PriceSummary } from './component/PriceSummary';
 import { CheckoutModal } from './component/CheckoutModal';
 import { SpecialOfferBanner } from './component/SpecialOfferBanner';
 
+
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, cartCount } = useCart();
   const [showModal, setShowModal] = useState(false);
