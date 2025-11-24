@@ -237,7 +237,13 @@ export const CheckoutModal = ({
             email: contactDetails.email,
             contact: contactDetails.mobile.replace(/\s/g, ''),
           },
-          notes: { source: 'snackin_web_checkout', cart_items: JSON.stringify(cartItems), address: JSON.stringify(addressDetails) },
+          notes: { 
+            source: 'snackin_web_checkout', 
+            cart_items: JSON.stringify(cartItems), 
+            address: JSON.stringify(addressDetails),
+            free_items: JSON.stringify(freeItems),
+            free_items_count: freeItems.length.toString()
+          },
           retry: { enabled: true, max_count: 4 },
           timeout: 900,
           remember_customer: true,
