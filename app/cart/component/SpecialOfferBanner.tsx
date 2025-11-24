@@ -50,7 +50,7 @@ export const SpecialOfferBanner = ({
       // Reset auto-popup to allow it to trigger again
       setAutoPopupShown(false);
     }
-  }, [itemCount, minPacketsForDiscount, freeItemsSelected, onFreeItemsSelected]);
+  }, [itemCount, minPacketsForDiscount, onFreeItemsSelected]); // Remove freeItemsSelected from dependencies
   
   const progress = Math.min(100, (itemCount / minPacketsForDiscount) * 100);
   const packetsNeeded = Math.max(0, minPacketsForDiscount - itemCount);
@@ -66,7 +66,7 @@ export const SpecialOfferBanner = ({
 
       return () => clearTimeout(timer);
     }
-  }, [isEligible, autoPopupShown, showFreeItemSelector, freeItemsSelected]);
+  }, [isEligible, autoPopupShown, showFreeItemSelector]); // Remove freeItemsSelected from dependencies
 
   const handleFreeItemsSelection = (selectedItems: string[]) => {
     if (onFreeItemsSelected) {
