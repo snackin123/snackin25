@@ -3,7 +3,7 @@
 import { useCart } from '@/lib/cart-context';
 import { ShoppingCart, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Gift, X } from 'lucide-react';
 import { useCartCalculations } from '@/hooks/useCartCalculations';
@@ -24,13 +24,13 @@ export default function CartPage() {
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
 
-  const handleFreeItemsSelected = (selectedItems: string[]) => {
+  const handleFreeItemsSelected = useCallback((selectedItems: string[]) => {
     setSelectedFreeItems(selectedItems);
     // If free items are cleared (empty array), hide any notification
     if (selectedItems.length === 0) {
       setShowFreeItemNotification(false);
     }
-  };
+  }, []);
 
   const {
     deduplicatedCart,
