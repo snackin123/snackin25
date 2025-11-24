@@ -79,7 +79,19 @@ export const SpecialOfferBanner = ({
 
       return () => clearTimeout(timer);
     }
-  }, [isEligible, autoPopupShown, showFreeItemSelector]); // Remove freeItemsSelected from dependencies
+  }, [isEligible, autoPopupShown, showFreeItemSelector, freeItemsSelected]);
+
+  // Listen for custom event to open free item selector
+  useEffect(() => {
+    const handleOpenSelector = () => {
+      if (isEligible && !freeItemsSelected) {
+        setShowFreeItemSelector(true);
+      }
+    };
+    
+    window.addEventListener('openFreeItemSelector', handleOpenSelector);
+    return () => window.removeEventListener('openFreeItemSelector', handleOpenSelector);
+  }, [isEligible, freeItemsSelected]);
 
   const handleFreeItemsSelection = (selectedItems: string[]) => {
     if (onFreeItemsSelected) {

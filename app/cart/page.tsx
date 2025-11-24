@@ -23,6 +23,7 @@ export default function CartPage() {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
+  const [triggerFreeItemSelector, setTriggerFreeItemSelector] = useState(0);
 
   const handleFreeItemsSelected = useCallback((selectedItems: string[]) => {
     setSelectedFreeItems(selectedItems);
@@ -183,12 +184,27 @@ export default function CartPage() {
             <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300 flex-shrink-0 mt-1" />
             <div className="flex-1 min-w-0">
               <h4 className="font-bold text-yellow-300 mb-1 text-sm sm:text-base">🎁 Don't Miss Your FREE Items!</h4>
-              <p className="text-xs sm:text-sm text-red-100">
+              <p className="text-xs sm:text-sm text-red-100 mb-3">
                 You're eligible for 2 free items worth ₹258! Select them above before checkout.
               </p>
+              
+              {/* CTA Button */}
+              <button
+                onClick={() => {
+                  setShowFreeItemNotification(false);
+                  // Trigger the free item selector directly
+                  const event = new CustomEvent('openFreeItemSelector');
+                  window.dispatchEvent(event);
+                }}
+                className="w-full px-3 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-medium text-xs sm:text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2 mb-2"
+              >
+                <Gift className="w-4 h-4" />
+                Select Your FREE Items
+              </button>
+              
               <button
                 onClick={() => setShowFreeItemNotification(false)}
-                className="mt-2 text-xs text-red-200 hover:text-white transition-colors underline"
+                className="text-xs text-red-200 hover:text-white transition-colors underline"
               >
                 Got it, thanks!
               </button>
