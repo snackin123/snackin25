@@ -1,9 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { ShoppingBag, Gift, Sparkles, ArrowRight } from 'lucide-react';
+import { useOfferPeriod, createVideoErrorHandler, createVideoLoadHandler } from '../../../../utils/offerDates';
 
 // Preload Google Fonts
 const fontLinks = [
@@ -19,45 +21,23 @@ const FireworkIcon = () => (
 );
 
 const SnackinPromoBanner = () => {
-  const [isOfferActive, setIsOfferActive] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const videoSrc = '/promtional/Cybermonday.mp4';
 
-  // 🎉 Offer date range validation
+  // 🎉 Use shared offer period hook (production mode)
+  const { isBlackFriday, isCyberMonday, isOfferActive } = useOfferPeriod(false);
+
+  // 🎉 Update video state based on offer period
   useEffect(() => {
-    const checkOfferValidity = () => {
-      const now = new Date();
-      // Black Friday: November 20-30, 2025
-      const blackFridayStart = new Date(2025, 10, 20); // November 20, 2025
-      const blackFridayEnd = new Date(2025, 10, 29, 23, 59, 59); // November 29, 2025 11:59 PM
-      // Cyber Monday: November 30 - December 7, 2025
-      const cyberMondayStart = new Date(2025, 10, 30, 0, 0, 0); // November 30, 2025 12:00 AM
-      const cyberMondayEnd = new Date(2025, 11, 7, 23, 59, 59); // December 7, 2025 11:59 PM
-      
-      if (now >= cyberMondayStart && now <= cyberMondayEnd) {
-        setShowVideo(true);
-      } else if (now >= blackFridayStart && now <= blackFridayEnd) {
-        setShowVideo(false);
-      }
-      setIsOfferActive((now >= blackFridayStart && now <= blackFridayEnd) || (now >= cyberMondayStart && now <= cyberMondayEnd));
-    };
-    checkOfferValidity();
-    const intervalId = setInterval(checkOfferValidity, 60 * 60 * 1000);
-    return () => clearInterval(intervalId);
-  }, []);
+    setShowVideo(isCyberMonday);
+  }, [isCyberMonday]);
 
-  const handleVideoError = () => {
-    console.error('Video failed to load:', videoSrc);
-    setVideoError(true);
-  };
-
-  const handleVideoLoad = () => {
-    setIsVideoLoaded(true);
-    setVideoError(false);
-  };
+  // 🎉 Use shared video handlers
+  const handleVideoError = createVideoErrorHandler(setVideoError, videoSrc);
+  const handleVideoLoad = createVideoLoadHandler(setIsVideoLoaded, setVideoError);
 
   return (
     <>

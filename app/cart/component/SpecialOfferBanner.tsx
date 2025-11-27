@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, ShoppingBag, Tag, Zap, Sparkles } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { FreeItemSelector } from './FreeItemSelector';
+import { useOfferPeriod } from '../../../utils/offerDates';
 
 interface SpecialOfferBannerProps {
   itemCount: number;
@@ -35,6 +36,9 @@ export const SpecialOfferBanner = ({
   const [currentFreeItems, setCurrentFreeItems] = useState<string[]>([]);
   const prevItemCountRef = useRef(itemCount);
   const prevFreeItemsSelectedRef = useRef(freeItemsSelected);
+  
+  // 🎉 Use shared offer period hook (production mode)
+  const { isBlackFriday, isCyberMonday, isOfferActive } = useOfferPeriod(false);
   
   // Reset free items selection if cart count drops below minimum or becomes eligible again
   useEffect(() => {
@@ -109,10 +113,14 @@ export const SpecialOfferBanner = ({
 
   return (
     <div className="relative w-full">
-      {/* Black Friday Badge */}
+      {/* Offer Badge */}
       <div className="mb-2 flex justify-center">
-        <span className="inline-block bg-gradient-to-r from-red-600 to-black text-white text-xs sm:text-sm font-semibold px-4 py-1 rounded-full border border-red-500/30 shadow-sm">
-          Black Friday Special
+        <span className={`inline-block text-white text-xs sm:text-sm font-semibold px-4 py-1 rounded-full border shadow-sm ${
+          isCyberMonday 
+            ? 'bg-gradient-to-r from-purple-600 to-blue-600 border-purple-500/30'
+            : 'bg-gradient-to-r from-red-600 to-black border-red-500/30'
+        }`}>
+          {isCyberMonday ? 'Cyber Monday Special' : 'Black Friday Special'}
         </span>
       </div>
 
@@ -122,8 +130,12 @@ export const SpecialOfferBanner = ({
         transition={{ duration: 0.4 }}
         className={`relative overflow-hidden rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl transition-all ${
           isEligible
-            ? 'bg-gradient-to-br from-red-900/90 to-black/90 border border-red-500/30 text-white'
-            : 'bg-gradient-to-br from-red-800/80 to-black/80 border border-red-500/20 text-white'
+            ? isCyberMonday
+              ? 'bg-gradient-to-br from-purple-900/90 to-blue-900/90 border border-purple-500/30 text-white'
+              : 'bg-gradient-to-br from-red-900/90 to-black/90 border border-red-500/30 text-white'
+            : isCyberMonday
+              ? 'bg-gradient-to-br from-purple-800/80 to-blue-800/80 border border-purple-500/20 text-white'
+              : 'bg-gradient-to-br from-red-800/80 to-black/80 border border-red-500/20 text-white'
         }`}
       >
         {/* Decorative blurred background */}
@@ -146,20 +158,24 @@ export const SpecialOfferBanner = ({
           <div className="flex-1 w-full space-y-1.5">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <h3 className={`text-base sm:text-lg font-semibold ${
-                isEligible ? 'text-yellow-300' : 'text-red-200'
+                isEligible ? (isCyberMonday ? 'text-purple-300' : 'text-yellow-300') : (isCyberMonday ? 'text-purple-200' : 'text-red-200')
               }`}>
-                {isEligible ? 'Black Friday Deal Unlocked!' : 'Black Friday Special Offer'}
+                {isEligible ? (isCyberMonday ? 'Cyber Monday Deal Unlocked!' : 'Black Friday Deal Unlocked!') : (isCyberMonday ? 'Cyber Monday Special Offer' : 'Black Friday Special Offer')}
               </h3>
 
-              <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-gradient-to-r from-red-600/20 to-yellow-600/20 text-yellow-300 border border-yellow-500/30">
-                <Zap className="w-3 h-3 text-yellow-400" />
+              <span className={`flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full border ${
+                isCyberMonday 
+                  ? 'bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-purple-300 border-purple-500/30'
+                  : 'bg-gradient-to-r from-red-600/20 to-yellow-600/20 text-yellow-300 border-yellow-500/30'
+              }`}>
+                <Zap className={`w-3 h-3 ${isCyberMonday ? 'text-purple-400' : 'text-yellow-400'}`} />
                 <span className="hidden sm:inline">Limited Time</span>
                 <span className="sm:hidden">Limited</span>
               </span>
             </div>
 
-            <p className="text-xs sm:text-sm text-red-200">
-              Buy <span className="font-bold text-yellow-300">2 or more Snackin' items</span> and get <span className="font-bold text-yellow-300">2 absolutely FREE</span>
+            <p className={`text-xs sm:text-sm ${isCyberMonday ? 'text-purple-200' : 'text-red-200'}`}>
+              Buy <span className={`font-bold ${isCyberMonday ? 'text-purple-300' : 'text-yellow-300'}`}>2 or more Snackin' items</span> and get <span className={`font-bold ${isCyberMonday ? 'text-purple-300' : 'text-yellow-300'}`}>2 absolutely FREE</span>
             </p>
 
             <AnimatePresence mode="wait">
@@ -171,15 +187,15 @@ export const SpecialOfferBanner = ({
                   exit={{ opacity: 0, height: 0 }}
                   className="mt-2 sm:mt-3 space-y-2 overflow-hidden"
                 >
-                  <div className="flex justify-between items-center text-xs sm:text-sm font-medium text-red-200">
+                  <div className={`flex justify-between items-center text-xs sm:text-sm font-medium ${isCyberMonday ? 'text-purple-200' : 'text-red-200'}`}>
                     <span>{itemCount} of {minPacketsForDiscount} items</span>
-                    <span className="text-yellow-300">{packetsNeeded} more to unlock</span>
+                    <span className={isCyberMonday ? 'text-purple-300' : 'text-yellow-300'}>{packetsNeeded} more to unlock</span>
                   </div>
 
                   <ProgressBar progress={progress} isEligible={isEligible} />
 
-                  <p className="text-xs text-red-300 text-center sm:text-left">
-                    Add <span className="font-semibold text-yellow-300">{packetsNeeded} more Snackin' item{packetsNeeded !== 1 ? 's' : ''}</span> to get 2 absolutely FREE!
+                  <p className={`text-xs text-center sm:text-left ${isCyberMonday ? 'text-purple-300' : 'text-red-300'}`}>
+                    Add <span className={`font-semibold ${isCyberMonday ? 'text-purple-300' : 'text-yellow-300'}`}>{packetsNeeded} more Snackin' item{packetsNeeded !== 1 ? 's' : ''}</span> to get 2 absolutely FREE!
                   </p>
                 </motion.div>
               ) : (
@@ -205,14 +221,20 @@ export const SpecialOfferBanner = ({
                         scale: [1, 1.05, 1],
                         y: [0, -1, 0],
                         boxShadow: [
-                          "0 0 0 0 rgba(239, 68, 68, 0.8)",
-                          "0 0 0 15px rgba(239, 68, 68, 0)",
-                          "0 0 0 0 rgba(239, 68, 68, 0)"
+                          `0 0 0 0 ${isCyberMonday ? 'rgba(147, 51, 234, 0.8)' : 'rgba(239, 68, 68, 0.8)'}`,
+                          `0 0 0 15px ${isCyberMonday ? 'rgba(147, 51, 234, 0)' : 'rgba(239, 68, 68, 0)'}`,
+                          `0 0 0 0 ${isCyberMonday ? 'rgba(147, 51, 234, 0)' : 'rgba(239, 68, 68, 0)'}`
                         ],
                         background: [
-                          "linear-gradient(to right, rgb(220, 38, 38), rgb(0, 0, 0))",
-                          "linear-gradient(to right, rgb(239, 68, 68), rgb(17, 24, 39))",
-                          "linear-gradient(to right, rgb(220, 38, 38), rgb(0, 0, 0))"
+                          isCyberMonday 
+                            ? "linear-gradient(to right, rgb(147, 51, 234), rgb(59, 130, 246))"
+                            : "linear-gradient(to right, rgb(220, 38, 38), rgb(0, 0, 0))",
+                          isCyberMonday 
+                            ? "linear-gradient(to right, rgb(168, 85, 247), rgb(79, 70, 229))"
+                            : "linear-gradient(to right, rgb(239, 68, 68), rgb(17, 24, 39))",
+                          isCyberMonday 
+                            ? "linear-gradient(to right, rgb(147, 51, 234), rgb(59, 130, 246))"
+                            : "linear-gradient(to right, rgb(220, 38, 38), rgb(0, 0, 0))"
                         ]
                       } : {}
                     }
@@ -225,7 +247,9 @@ export const SpecialOfferBanner = ({
                     className={`w-full px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 relative overflow-hidden ${
                       freeItemsSelected 
                         ? 'bg-gradient-to-r from-gray-600 to-gray-800 text-white hover:from-gray-700 hover:to-gray-900' 
-                        : 'bg-gradient-to-r from-red-600 to-black text-white hover:from-red-700 hover:to-gray-900'
+                        : isCyberMonday
+                          ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
+                          : 'bg-gradient-to-r from-red-600 to-black text-white hover:from-red-700 hover:to-gray-900'
                     }`}
                   >
                     {/* Animated background shine effect */}
@@ -270,13 +294,13 @@ export const SpecialOfferBanner = ({
                     {/* Urgency indicator */}
                     {!freeItemsSelected && (
                       <motion.div
-                        className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"
+                        className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${isCyberMonday ? 'bg-purple-400' : 'bg-yellow-400'}`}
                         animate={{
                           scale: [1, 1.3, 1],
                           opacity: [1, 0.7, 1]
                         }}
                         transition={{
-                          duration: 1,
+                          duration: 1.5,
                           repeat: Infinity,
                           ease: "easeInOut"
                         }}
