@@ -20,19 +20,44 @@ const FireworkIcon = () => (
 
 const SnackinPromoBanner = () => {
   const [isOfferActive, setIsOfferActive] = useState(true);
+  const [showVideo, setShowVideo] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
+  const videoSrc = '/promtional/Cybermonday.mp4';
+
+  // 🎉 Offer date range validation
   useEffect(() => {
     const checkOfferValidity = () => {
       const now = new Date();
-      // Black Friday 2025 - November 24th (Black Friday) through Cyber Monday
-      const offerStartDate = new Date(2025, 10, 24); // November 24, 2025
-      const offerEndDate = new Date(2025, 10, 30);   // November 30, 2025
-      setIsOfferActive(now >= offerStartDate && now <= offerEndDate);
+      // Black Friday: November 20-30, 2025
+      const blackFridayStart = new Date(2025, 10, 20); // November 20, 2025
+      const blackFridayEnd = new Date(2025, 10, 29, 23, 59, 59); // November 29, 2025 11:59 PM
+      // Cyber Monday: November 30 - December 7, 2025
+      const cyberMondayStart = new Date(2025, 10, 30, 0, 0, 0); // November 30, 2025 12:00 AM
+      const cyberMondayEnd = new Date(2025, 11, 7, 23, 59, 59); // December 7, 2025 11:59 PM
+      
+      if (now >= cyberMondayStart && now <= cyberMondayEnd) {
+        setShowVideo(true);
+      } else if (now >= blackFridayStart && now <= blackFridayEnd) {
+        setShowVideo(false);
+      }
+      setIsOfferActive((now >= blackFridayStart && now <= blackFridayEnd) || (now >= cyberMondayStart && now <= cyberMondayEnd));
     };
     checkOfferValidity();
     const intervalId = setInterval(checkOfferValidity, 60 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
+
+  const handleVideoError = () => {
+    console.error('Video failed to load:', videoSrc);
+    setVideoError(true);
+  };
+
+  const handleVideoLoad = () => {
+    setIsVideoLoaded(true);
+    setVideoError(false);
+  };
 
   return (
     <>
@@ -42,7 +67,7 @@ const SnackinPromoBanner = () => {
         ))}
       </Head>
 
-      <section className="relative w-full overflow-hidden min-h-[500px] md:min-h-[600px] flex items-center justify-center text-center text-white rounded-3xl shadow-2xl font-['Poppins'] mt-8 md:mt-12">
+      <section className="relative w-full overflow-hidden min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[600px] flex items-center justify-center text-center text-white rounded-3xl shadow-2xl font-['Poppins'] mt-4 sm:mt-6 md:mt-8 lg:mt-12">
         {/* Background */}
         <div className="absolute inset-0 z-0">
           {/* Main gradient with rich colors */}
@@ -78,104 +103,141 @@ const SnackinPromoBanner = () => {
         </div>
 
         {/* Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10 px-6 max-w-4xl mx-auto py-12"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-4 text-sm md:text-base uppercase tracking-widest text-yellow-200 font-semibold italic"
-          >
-            Black Friday Special
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-2 md:mb-4 drop-shadow-lg"
-          >
-            <span className="text-white font-['Tangerine'] text-5xl md:text-7xl lg:text-8xl italic">Black Friday</span>
-            <span className="block text-yellow-300 font-['Dancing_Script'] text-3xl md:text-4xl mt-2 italic">Mega Sale with SnackIn'</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed font-medium italic"
-          >
-            Buy <span className="font-bold text-yellow-200">2 or more Snackin' items</span> and get <span className="text-yellow-200 font-bold">2 absolutely FREE</span> <br />
-            <span className="text-yellow-300">Choose your free items from our special selection!</span> <br />
-            <span className="text-green-300">(Limited time offer - Save up to ₹258!)</span>
-          </motion.p>
-
-          {/* Interactive CTA Card */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
-            className="relative group mb-6 md:mb-8 cursor-pointer"
-            onClick={() => window.location.href = '/products'}
-          >
-            {/* Outer glow ring */}
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/30 via-red-500/30 to-yellow-400/30 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 animate-pulse"></div>
-            
-            {/* Main card container */}
-            <div className="relative bg-gradient-to-br from-red-900/90 via-red-800/80 to-black/90 backdrop-blur-md rounded-3xl p-8 md:p-10 border border-red-500/30 shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-red-500/25 overflow-hidden">
-              
-              {/* Animated background pattern */}
-              <div className="absolute inset-0 opacity-20">
-                <div className="h-full w-full bg-gradient-to-tr from-red-600/20 via-transparent to-yellow-600/20 animate-spin-slow"></div>
+        {showVideo ? (
+          // Video mode - only show video covering exact banner space
+          <div className="absolute inset-0 w-full h-full min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[600px] overflow-hidden z-10">
+            {!videoError ? (
+              <video
+                src={videoSrc}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ${
+                  isVideoLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoadedData={handleVideoLoad}
+                onError={handleVideoError}
+                style={{
+                  objectPosition: 'center center',
+                  userSelect: 'none',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            ) : (
+              <div className="absolute inset-0 w-full h-full min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[600px] bg-gradient-to-br from-purple-900 via-amber-900 to-red-900 flex items-center justify-center">
+                <div className="text-white text-center p-4">
+                  <p className="text-lg font-semibold mb-2">Cyber Monday Deal</p>
+                  <p className="text-sm opacity-80">Special offer available!</p>
+                </div>
               </div>
+            )}
+            {!isVideoLoaded && !videoError && (
+              <div className="absolute inset-0 w-full h-full min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[600px] bg-gradient-to-br from-purple-900 via-amber-900 to-red-900 animate-pulse" />
+            )}
+          </div>
+        ) : (
+          // Black Friday content mode
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10 px-6 max-w-4xl mx-auto py-12"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-4 text-sm md:text-base uppercase tracking-widest text-yellow-200 font-semibold italic"
+            >
+              Black Friday Special
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-2 md:mb-4 drop-shadow-lg"
+            >
+              <span className="text-white font-['Tangerine'] text-5xl md:text-7xl lg:text-8xl italic">Black Friday</span>
+              <span className="block text-yellow-300 font-['Dancing_Script'] text-3xl md:text-4xl mt-2 italic">Mega Sale with SnackIn'</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed font-medium italic"
+            >
+              Buy <span className="font-bold text-yellow-200">2 or more Snackin' items</span> and get <span className="text-yellow-200 font-bold">2 absolutely FREE</span> <br />
+              <span className="text-yellow-300">Choose your free items from our special selection!</span> <br />
+              <span className="text-green-300">(Limited time offer - Save up to ₹258!)</span>
+            </motion.p>
+
+            {/* Interactive CTA Card */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
+              className="relative group mb-6 md:mb-8 cursor-pointer"
+              onClick={() => window.location.href = '/products'}
+            >
+              {/* Outer glow ring */}
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/30 via-red-500/30 to-yellow-400/30 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 animate-pulse"></div>
               
-              {/* Floating sparkle effects */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-2 right-2 w-1 h-1 bg-yellow-300 rounded-full animate-twinkle"></div>
-                <div className="absolute bottom-4 left-3 w-2 h-2 bg-yellow-200 rounded-full animate-twinkle-delayed"></div>
-                <div className="absolute top-6 left-8 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-              </div>
-              
-              {/* Content */}
-              <div className="relative z-10 text-center">
-                {/* Icon */}
-                <div className="mb-4 flex justify-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
-                    </svg>
+              {/* Main card container */}
+              <div className="relative bg-gradient-to-br from-red-900/90 via-red-800/80 to-black/90 backdrop-blur-md rounded-3xl p-8 md:p-10 border border-red-500/30 shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-red-500/25 overflow-hidden">
+                
+                {/* Animated background pattern */}
+                <div className="absolute inset-0 opacity-20">
+                  <div className="h-full w-full bg-gradient-to-tr from-red-600/20 via-transparent to-yellow-600/20 animate-spin-slow"></div>
+                </div>
+                
+                {/* Floating sparkle effects */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute top-2 right-2 w-1 h-1 bg-yellow-300 rounded-full animate-twinkle"></div>
+                  <div className="absolute bottom-4 left-3 w-2 h-2 bg-yellow-200 rounded-full animate-twinkle-delayed"></div>
+                  <div className="absolute top-6 left-8 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
+                </div>
+                
+                {/* Content */}
+                <div className="relative z-10 text-center">
+                  {/* Icon */}
+                  <div className="mb-4 flex justify-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  {/* Headline */}
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-yellow-300 transition-colors duration-300">
+                   Unlock Your Black Friday Deal
+                  </h3>
+                  
+                  {/* Subtitle */}
+                  <p className="text-red-200 text-sm md:text-base mb-6 font-medium">
+                    Buy 2 Get 2 FREE - Select free items on checkout
+                  </p>  
+                  {/* Trust indicators */}
+                  <div className="flex justify-center gap-4 mt-6 text-xs text-red-300">
+                    <div className="flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                      </svg>
+                      <span>Instant Savings</span>
+                    </div>
                   </div>
                 </div>
                 
-                {/* Headline */}
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-yellow-300 transition-colors duration-300">
-                 Unlock Your Black Friday Deal
-                </h3>
-                
-                {/* Subtitle */}
-                <p className="text-red-200 text-sm md:text-base mb-6 font-medium">
-                  Buy 2 Get 2 FREE - Select free items on checkout
-                </p>  
-                {/* Trust indicators */}
-                <div className="flex justify-center gap-4 mt-6 text-xs text-red-300">
-                  <div className="flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                    </svg>
-                    <span>Instant Savings</span>
-                  </div>
-                </div>
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-yellow-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
               </div>
-              
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-yellow-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
-            </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        )}
 
         {/* Decorative Elements */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">

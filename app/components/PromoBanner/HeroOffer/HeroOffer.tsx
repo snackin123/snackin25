@@ -17,50 +17,99 @@ const FireworkIcon = () => (
 );
 
 export default function HeroOffer() {
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isOfferActive, setIsOfferActive] = useState(true);
+  const [videoError, setVideoError] = useState(false);
+  const [useVideo, setUseVideo] = useState(false);
 
+  const videoSrc = '/promtional/Cybermonday.mp4';
   const imageSrc = '/promtional/BlackFriday.png';
   const placeholderImage =
-    'data:image/svg+xml;base64,PHN2dyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxYzFlMjEiLz48L3N2Zz4=';
+    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxYzFlMjEiLz48L3N2Zz4=';
 
   // 🎉 Offer date range validation
   useEffect(() => {
     const checkOfferValidity = () => {
       const now = new Date();
-      const offerStartDate = new Date(2025, 10, 20); // November 20, 2025
-      const offerEndDate = new Date(2025, 10, 30); // November 30, 2025
-      setIsOfferActive(now >= offerStartDate && now <= offerEndDate);
+      // Black Friday: November 20-30, 2025
+      const blackFridayStart = new Date(2025, 10, 20); // November 20, 2025
+      const blackFridayEnd = new Date(2025, 10, 29, 23, 59, 59); // November 29, 2025 11:59 PM
+      // Cyber Monday: November 30 - December 7, 2025
+      const cyberMondayStart = new Date(2025, 10, 30, 0, 0, 0); // November 30, 2025 12:00 AM
+      const cyberMondayEnd = new Date(2025, 11, 7, 23, 59, 59); // December 7, 2025 11:59 PM
+      
+      if (now >= cyberMondayStart && now <= cyberMondayEnd) {
+        setUseVideo(true);
+      } else if (now >= blackFridayStart && now <= blackFridayEnd) {
+        setUseVideo(false);
+      }
+      setIsOfferActive((now >= blackFridayStart && now <= blackFridayEnd) || (now >= cyberMondayStart && now <= cyberMondayEnd));
     };
     checkOfferValidity();
     const interval = setInterval(checkOfferValidity, 60 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
+  const handleVideoError = () => {
+    console.error('Video failed to load:', videoSrc);
+    setVideoError(true);
+  };
+
+  const handleVideoLoad = () => {
+    setIsVideoLoaded(true);
+    setVideoError(false);
+  };
+
   return (
     <section className="relative w-full h-[85vh] min-h-[550px] md:h-[90vh] lg:h-screen overflow-hidden">
       {/* 🔮 Background with Enhanced Dark Overlay */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/60 z-0" />
-        <Image
-          src={imageSrc}
-          alt="Diwali Special Offer - snackin'"
-          fill
-          priority
-          quality={85}
-          sizes="100vw"
-          className={`object-cover transition-opacity duration-1000 ${
-            isImageLoaded ? 'opacity-80' : 'opacity-0'
-          }`}
-          onLoadingComplete={() => setIsImageLoaded(true)}
-          placeholder="blur"
-          blurDataURL={placeholderImage}
-          style={{
-            objectPosition: 'center center',
-            userSelect: 'none',
-          }}
-        />
-        {!isImageLoaded && (
+        {useVideo ? (
+          !videoError ? (
+            <video
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ${
+                isVideoLoaded ? 'opacity-80' : 'opacity-0'
+              }`}
+              onLoadedData={handleVideoLoad}
+              onError={handleVideoError}
+              style={{
+                objectPosition: 'center center',
+                userSelect: 'none',
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-amber-900 to-red-900 flex items-center justify-center">
+              <div className="text-white text-center p-4">
+                <p className="text-lg font-semibold mb-2">Cyber Monday Deal</p>
+                <p className="text-sm opacity-80">Special offer available!</p>
+              </div>
+            </div>
+          )
+        ) : (
+          <Image
+            src={imageSrc}
+            alt="Black Friday Special Offer - snackin'"
+            fill
+            priority
+            quality={85}
+            sizes="100vw"
+            className="object-cover opacity-80 transition-opacity duration-1000"
+            style={{
+              objectPosition: 'center center',
+              userSelect: 'none',
+            }}
+          />
+        )}
+        
+        {useVideo && !isVideoLoaded && !videoError && (
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-amber-900 to-red-900 animate-pulse" />
         )}
       </div>
@@ -70,32 +119,34 @@ export default function HeroOffer() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 pt-20 sm:pt-24 md:pt-32 lg:pt-48 pb-6 sm:pb-8 md:pb-10 lg:pb-20 flex flex-col justify-end min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] lg:min-h-[85vh]"
+        className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 pt-16 sm:pt-20 md:pt-24 lg:pt-32 pb-4 sm:pb-6 md:pb-8 lg:pb-12 flex flex-col min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] lg:min-h-[85vh]"
       >
         {/* CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex justify-center px-2 sm:px-4"
+          className="flex justify-center px-2 sm:px-4 mt-auto"
         >
-          <Link href="/products" className="inline-block">
-            <motion.button
-              whileHover={{
-                scale: 1.06,
-                boxShadow: '0 0 25px rgba(245, 158, 11, 0.6)',
-              }}
-              whileTap={{ scale: 0.97 }}
-              className="relative bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-gray-900 font-bold px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full shadow-lg overflow-hidden group transition-all duration-500 text-sm sm:text-base md:text-lg"
-            >
+          <div className="bg-black/40 backdrop-blur-sm rounded-full p-1 sm:p-2 md:p-3">
+            <Link href="/products" className="inline-block">
+              <motion.button
+                whileHover={{
+                  scale: 1.06,
+                  boxShadow: '0 0 25px rgba(245, 158, 11, 0.6)',
+                }}
+                whileTap={{ scale: 0.97 }}
+                className="relative bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-gray-900 font-bold px-3 sm:px-4 md:px-6 lg:px-8 py-1 sm:py-2 md:py-3 rounded-full shadow-lg overflow-hidden group transition-all duration-500 text-xs sm:text-sm md:text-base"
+              >
               <span className="relative z-10 flex items-center justify-center italic">
                 <FireworkIcon />
-                <span className="mx-1 sm:mx-2">Unlock Your Black Friday Deal</span>
+                <span className="mx-1 sm:mx-2">{useVideo ? 'Unlock Your Cyber Monday Deal' : 'Unlock Your Black Friday Deal'}</span>
                 <FireworkIcon />
               </span>
               <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.button>
           </Link>
+          </div>
         </motion.div>
       </motion.div>
 
