@@ -90,6 +90,31 @@ export default function HeroOffer() {
     }
   };
 
+  /* --------------------------- Handle user interaction --------------------------- */
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      const video = videoRef.current;
+      if (video && video.muted) {
+        enableSound();
+        // Remove event listeners after first interaction
+        document.removeEventListener('click', handleUserInteraction);
+        document.removeEventListener('keydown', handleUserInteraction);
+        document.removeEventListener('touchstart', handleUserInteraction);
+      }
+    };
+
+    // Add event listeners for user interaction
+    document.addEventListener('click', handleUserInteraction);
+    document.addEventListener('keydown', handleUserInteraction);
+    document.addEventListener('touchstart', handleUserInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+    };
+  }, []);
+
   return (
     <section className="relative w-full min-h-[100dvh] flex flex-col justify-end overflow-hidden">
 
