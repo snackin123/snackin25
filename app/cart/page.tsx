@@ -5,14 +5,14 @@ import { ShoppingCart, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Gift, X } from 'lucide-react';
+import { Gift, X, Snowflake } from 'lucide-react';
 import { useCartCalculations } from '@/hooks/useCartCalculations';
 import { useCoupon } from '@/hooks/useCoupon';
 import { CartItem } from './component/CartItem';
 import { PriceSummary } from './component/PriceSummary';
 import { CheckoutModal } from './component/CheckoutModal';
 import { SpecialOfferBanner } from './component/SpecialOfferBanner';
-
+import { products as allProducts } from '@/lib/data/products';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, cartCount } = useCart();
@@ -24,6 +24,7 @@ export default function CartPage() {
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
   const [triggerFreeItemSelector, setTriggerFreeItemSelector] = useState(0);
+  const [christmasDiscount, setChristmasDiscount] = useState<number>(0);
 
   const handleFreeItemsSelected = useCallback((selectedItems: string[]) => {
     setSelectedFreeItems(selectedItems);
@@ -43,24 +44,22 @@ export default function CartPage() {
   } = useCartCalculations(cart, cartCount);
   const couponState = useCoupon(subtotal);
 
+  // Apply Christmas Special: 25% OFF on ₹250+ orders
+  useEffect(() => {
+    if (subtotal >= 250) {
+      const christmasDiscountAmount = subtotal * 0.25;
+      setChristmasDiscount(christmasDiscountAmount);
+    } else {
+      setChristmasDiscount(0);
+    }
+  }, [subtotal]);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   const handleCheckout = () => {
-    // Check if user is eligible for free items but hasn't selected them
-    const isEligibleForFreeItems = cartCount >= 2;
-    const hasSelectedFreeItems = selectedFreeItems.length === 2;
-    
-    if (isEligibleForFreeItems && !hasSelectedFreeItems) {
-      // Show notification and trigger free item selector
-      setShowFreeItemNotification(true);
-      // Auto-hide notification after 4 seconds
-      setTimeout(() => setShowFreeItemNotification(false), 4000);
-      return;
-    }
-    
-    // Proceed with normal checkout
+    // Proceed with checkout
     if (checkoutStep === 'cart') {
       setShowModal(true);
       setCheckoutStep('contact');
@@ -106,7 +105,34 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-[#FFFDF9] pt-24 px-4 sm:px-6 lg:px-8 pb-12">
       <div className="max-w-6xl mx-auto">
-        {/* Black Friday Banner */}
+        {/* Christmas Special Banner */}
+        {subtotal >= 250 && (
+          <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl bg-gradient-to-b from-[#0d1117] via-[#14212e] to-[#0d1117] text-white py-8 sm:py-10 px-6 sm:px-10 mb-6">
+            {/* GLOW */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_70%)]"></div>
+
+            {/* LABEL */}
+            <div className="text-blue-200/90 uppercase tracking-widest text-xs sm:text-sm mb-4 text-center relative z-10">
+              <div className="flex justify-center items-center gap-2">
+                <Snowflake className="w-4 h-4" />
+                Christmas Special
+                <Snowflake className="w-4 h-4" />
+              </div>
+            </div>
+
+            {/* TITLE */}
+            <h3 className="text-center text-2xl sm:text-3xl font-bold mb-2 relative z-10">
+              <span>🎄 Enjoy Christmas Savings</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200">
+                25% OFF on ₹250+
+              </span>
+            </h3>
+
+            <p className="text-center text-white/85 max-w-xl mx-auto text-sm sm:text-base relative z-10">
+              A little Christmas gift from us to you — save big this festive season!
+            </p>
+          </div>
+        )}
 
         <h1 className="text-3xl font-bold mb-10 text-center text-red-900 mt-6">Your Shopping Cart</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -130,24 +156,25 @@ export default function CartPage() {
             </div>
           </div>
           <div className="lg:col-span-1 space-y-4 sticky top-28">
-            <SpecialOfferBanner 
-              itemCount={cartCount} 
-              minPacketsForDiscount={2} 
+            <SpecialOfferBanner
+              itemCount={cartCount}
+              minPacketsForDiscount={2}
               onFreeItemsSelected={handleFreeItemsSelected}
             />
             <div className="lg:col-span-1">
               <PriceSummary
                 subtotal={subtotal}
                 shipping={shipping}
-                discount={discount}
+                discount={discount + christmasDiscount}
                 comboDiscount={comboDiscount}
-                finalTotal={finalTotal}
+                finalTotal={finalTotal - christmasDiscount}
                 cartCount={cartCount}
                 orderPlaced={orderPlaced}
                 orderDetails={orderDetails}
                 handleCheckout={handleCheckout}
                 cartItems={deduplicatedCart}
                 freeItems={selectedFreeItems}
+                christmasDiscount={christmasDiscount}
               />
             </div>
           </div>
@@ -161,9 +188,9 @@ export default function CartPage() {
           setCheckoutStep={setCheckoutStep}
           cartItems={deduplicatedCart}
           subtotal={subtotal}
-          discount={discount}
+          discount={discount + christmasDiscount}
           shipping={shipping}
-          finalTotal={finalTotal}
+          finalTotal={finalTotal - christmasDiscount}
           couponState={couponState}
           setOrderPlaced={setOrderPlaced}
           setOrderDetails={setOrderDetails}
@@ -171,37 +198,23 @@ export default function CartPage() {
           freeItems={selectedFreeItems}
         />
       )}
-      
-      {/* Free Item Notification */}
-      {showFreeItemNotification && (
+
+      {/* Christmas Special Notification */}
+      {subtotal >= 250 && subtotal < 500 && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
-          className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-sm bg-gradient-to-r from-red-600 to-black text-white rounded-lg shadow-2xl p-4 z-50 border border-red-500/30"
+          className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-sm bg-gradient-to-r from-red-600 to-green-600 text-white rounded-lg shadow-2xl p-4 z-50 border border-red-500/30"
         >
           <div className="flex items-start gap-3">
             <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300 flex-shrink-0 mt-1" />
             <div className="flex-1 min-w-0">
-              <h4 className="font-bold text-yellow-300 mb-1 text-sm sm:text-base">🎁 Don't Miss Your FREE Items!</h4>
+              <h4 className="font-bold text-yellow-300 mb-1 text-sm sm:text-base">🎄 Christmas Special Applied!</h4>
               <p className="text-xs sm:text-sm text-red-100 mb-3">
-                You're eligible for 2 free items worth ₹258! Select them above before checkout.
+                You're enjoying 25% OFF (₹{Math.round(christmasDiscount)}) on your order!
               </p>
-              
-              {/* CTA Button */}
-              <button
-                onClick={() => {
-                  setShowFreeItemNotification(false);
-                  // Trigger the free item selector directly
-                  const event = new CustomEvent('openFreeItemSelector');
-                  window.dispatchEvent(event);
-                }}
-                className="w-full px-3 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-medium text-xs sm:text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2 mb-2"
-              >
-                <Gift className="w-4 h-4" />
-                Select Your FREE Items
-              </button>
-              
+
               <button
                 onClick={() => setShowFreeItemNotification(false)}
                 className="text-xs text-red-200 hover:text-white transition-colors underline"

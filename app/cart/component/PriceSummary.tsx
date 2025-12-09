@@ -18,7 +18,8 @@ interface PriceSummaryProps {
   orderDetails: any;
   handleCheckout: () => void;
   cartItems: CartItem[];
-  freeItems?: string[]; // Add free items prop
+  freeItems?: string[];
+  christmasDiscount?: number;
 }
 
 export const PriceSummary = ({
@@ -33,6 +34,7 @@ export const PriceSummary = ({
   handleCheckout,
   cartItems,
   freeItems = [],
+  christmasDiscount = 0,
 }: PriceSummaryProps) => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -70,7 +72,7 @@ export const PriceSummary = ({
         {/* Shipping */}
         <div className="flex justify-between text-gray-800">
           <span>Shipping</span>
-          <span>{shipping > 0 ? formatPrice(shipping) : 'Free'}</span>
+          <span>{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
         </div>
         
         {/* Discounts */}
@@ -81,6 +83,14 @@ export const PriceSummary = ({
           </div>
         )}
         
+        {/* Christmas Special Discount */}
+        {christmasDiscount && christmasDiscount > 0 && (
+          <div className="flex justify-between text-green-600 font-medium">
+            <span>🎄 Christmas Special (25% OFF)</span>
+            <span>-{formatPrice(christmasDiscount)}</span>
+          </div>
+        )}
+
         {/* Black Friday Combo Discount */}
         {comboDiscount > 0 && (
           <div className="flex justify-between text-green-600 font-medium">
