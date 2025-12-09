@@ -65,16 +65,16 @@ const Navbar = () => {
           <div className="flex-1 flex justify-center lg:justify-start">
             <Link href="/" className="relative w-24 sm:w-28 md:w-32 h-10 md:h-12 mx-auto lg:mx-0">
               {isClient && (
-                <Image
-                  src="/Images/WhiteLogo.webp"
-                  alt="SnackIn Logo"
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 120px, 180px"
-                  priority={false}
-                  loading="lazy"
-                  unoptimized={process.env.NODE_ENV !== 'production'}
-                />
+              <Image
+                src="/Images/WhiteLogo.webp"
+                alt="SnackIn Logo"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 120px, 180px"
+                priority={true}
+                loading="eager"
+                unoptimized={process.env.NODE_ENV !== 'production'}
+              />
               )}
             </Link>
           </div>
