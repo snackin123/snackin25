@@ -1,140 +1,114 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { useOfferPeriod, createVideoErrorHandler, createVideoLoadHandler } from '../../../../utils/offerDates';
+import React, { useState, useEffect, useRef } from 'react';
 
-// 🔥 Decorative Icon
-const FireworkIcon = () => (
-  <svg
-    className="w-5 h-5 text-yellow-300 inline-block mx-0.5 drop-shadow-md"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-  >
-    <path d="M5.3 15.7l1.4 1.4-1.4 1.4-1.4-1.4 1.4-1.4M15.3 14.3l-4-4 1.4-1.4 4 4-1.4 1.4m-6.6 0l-4-4 1.4-1.4 4 4-1.4 1.4m8.5 1l-1.4 1.4-1.4-1.4 1.4-1.4 1.4 1.4M12 5l-1 2h2l-1-2m-5 2L5 7l1 2 2-2m11 2l-2-2 1-2 2 2m-9-2l-1-2 2 2h-1m2 8h-1v2h2v-1l-1-1z" />
-  </svg>
-);
+type ChristmasIconType = "snowflake" | "star" | "holly";
+
+const ChristmasPatternIcon = ({ type = "snowflake", className = "" }: { type?: ChristmasIconType, className?: string }) => {
+  const icons: Record<ChristmasIconType, React.ReactElement> = {
+    snowflake: (
+      <svg className={`w-4 h-4 ${className}`} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+      </svg>
+    ),
+    star: (
+      <svg className={`w-4 h-4 ${className}`} viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="12,2 15,8.5 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8.5" />
+      </svg>
+    ),
+    holly: (
+      <svg className={`w-4 h-4 ${className}`} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19,6C18.2,6 17.5,5.5 17,4.7C16.5,5.5 15.8,6 15,6C13.3,6 12,4.7 12,3C12,4.7 10.7,6 9,6C8.2,6 7.5,5.5 7,4.7C6.5,5.5 5.8,6 5,6C3.3,6 2,4.7 2,3H22C22,4.7 20.7,6 19,6Z" />
+      </svg>
+    )
+  };
+
+  return icons[type];
+};
 
 export default function HeroOffer() {
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const [useVideo, setUseVideo] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  const videoSrc = '/promtional/Cybermonday.mp4';
-  const imageSrc = '/promtional/BlackFriday.png';
-  const placeholderImage =
-    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxYzFlMjEiLz48L3N2Zz4=';
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoSrc = "/promtional/Christmas Web Banner_2.mp4";
 
-  // 🎉 Use shared offer period hook (production mode)
-  const { isBlackFriday, isCyberMonday, isOfferActive } = useOfferPeriod(false);
-
-  // 🎉 Update video state based on offer period
+  // 🧊 Ensures video auto-plays on all devices and loads faster
   useEffect(() => {
-    setUseVideo(isCyberMonday);
-  }, [isCyberMonday]);
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
 
-  // 🎉 Use shared video handlers
-  const handleVideoError = createVideoErrorHandler(setVideoError, videoSrc);
-  const handleVideoLoad = createVideoLoadHandler(setIsVideoLoaded, setVideoError);
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // force play when blocked by browser
+          videoRef.current!.muted = true;
+          videoRef.current!.play().catch(() => { });
+        });
+      }
+    }
+  }, []);
 
   return (
-    <section className="relative w-full h-[85vh] min-h-[550px] md:h-[90vh] lg:h-screen overflow-hidden">
-      {/* 🔮 Background with Enhanced Dark Overlay */}
+    <section className="relative w-full h-screen sm:h-screen md:h-screen lg:h-screen xl:h-screen min-h-[480px] sm:min-h-[520px] md:min-h-[560px] lg:min-h-[600px] xl:min-h-[640px] overflow-hidden flex flex-col justify-end">
+      
+      {/* 🔮 Background & Overlay */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/60 z-0" />
-        {useVideo ? (
-          !videoError ? (
-            <video
-              src={videoSrc}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ${
-                isVideoLoaded ? 'opacity-80' : 'opacity-0'
-              }`}
-              onLoadedData={handleVideoLoad}
-              onError={handleVideoError}
-              style={{
-                objectPosition: 'center center',
-                userSelect: 'none',
-                width: '100%',
-                height: '100%',
-              }}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-amber-900 to-red-900 flex items-center justify-center">
-              <div className="text-white text-center p-4">
-                <p className="text-lg font-semibold mb-2">Cyber Monday Deal</p>
-                <p className="text-sm opacity-80">Special offer available!</p>
-              </div>
-            </div>
-          )
-        ) : (
-          <Image
-            src={imageSrc}
-            alt="Black Friday Special Offer - snackin'"
-            fill
-            priority
-            quality={85}
-            sizes="100vw"
-            className="object-cover opacity-80 transition-opacity duration-1000"
-            style={{
-              objectPosition: 'center center',
-              userSelect: 'none',
-            }}
-          />
-        )}
-        
-        {useVideo && !isVideoLoaded && !videoError && (
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-amber-900 to-red-900 animate-pulse" />
+        <div className="absolute inset-0 bg-black/60 z-0" />
+
+        {/* HIGH PERFORMANCE VIDEO */}
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          preload="auto"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 
+            ${isLoaded ? "opacity-80" : "opacity-0"}`}
+          onLoadedData={() => setIsLoaded(true)}
+          onError={() => setHasError(true)}
+        />
+
+        {/* Fallback shimmer while loading */}
+        {!isLoaded && !hasError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-red-900 to-yellow-900 animate-pulse" />
         )}
       </div>
 
-      {/* 🌟 Content */}
+      {/* 🌟 CONTENT */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 pt-16 sm:pt-20 md:pt-24 lg:pt-32 pb-4 sm:pb-6 md:pb-8 lg:pb-12 flex flex-col min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] lg:min-h-[85vh]"
+        className="relative z-10 max-w-2xl sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto text-center px-3 sm:px-4 md:px-6 lg:px-8 flex flex-col justify-between"
       >
-        {/* CTA Button */}
+
+        {/* CTA BUTTON */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex justify-center px-2 sm:px-4 mt-auto"
+          className="flex justify-center mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16"
         >
-          <div className="bg-black/40 backdrop-blur-sm rounded-full p-1 sm:p-2 md:p-3">
-            <Link href="/products" className="inline-block">
-              <motion.button
-                whileHover={{
-                  scale: 1.06,
-                  boxShadow: '0 0 25px rgba(245, 158, 11, 0.6)',
-                }}
-                whileTap={{ scale: 0.97 }}
-                className="relative bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-gray-900 font-bold px-3 sm:px-4 md:px-6 lg:px-8 py-1 sm:py-2 md:py-3 rounded-full shadow-lg overflow-hidden group transition-all duration-500 text-xs sm:text-sm md:text-base"
-              >
-              <span className="relative z-10 flex items-center justify-center italic">
-                <FireworkIcon />
-                <span className="mx-1 sm:mx-2">{useVideo ? 'Unlock Your Cyber Monday Deal' : 'Unlock Your Black Friday Deal'}</span>
-                <FireworkIcon />
-              </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <Link href="/products">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.96 }}
+              className="px-4 sm:px-5 md:px-6 lg:px-7 xl:px-8 py-3 sm:py-3.5 md:py-4 lg:py-4.5 rounded-full font-semibold text-white 
+                bg-white/10 backdrop-blur-md border border-white/20 
+                shadow-lg hover:bg-white/20 transition-all flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg italic"
+            >
+              <ChristmasPatternIcon type="snowflake" className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="hidden sm:inline">Ring In the</span> Christmas Sale
+              <ChristmasPatternIcon type="snowflake" className="w-4 sm:w-5 h-4 sm:h-5" />
             </motion.button>
           </Link>
-          </div>
         </motion.div>
       </motion.div>
-
-      {/* ✨ Floating Dots */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 opacity-80">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
-        ))}
-      </div>
     </section>
   );
 }

@@ -62,7 +62,7 @@ const alternateLinks = [
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" className={poppins.className}>
+    <html lang="en" className={poppins.className} suppressHydrationWarning>
       <head>
         <GoogleAnalytics />
       </head>
