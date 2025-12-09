@@ -31,6 +31,9 @@ const ChristmasPatternIcon = ({ type = "snowflake", className = "" }: { type?: C
 export default function HeroOffer() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+  const [videoKey, setVideoKey] = useState(0);
+  const [retryCount, setRetryCount] = useState(0);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const videoSrc = "/promtional/Christmas Web Banner_2.mp4";
@@ -38,18 +41,60 @@ export default function HeroOffer() {
   // 🧊 Ensures video auto-plays on all devices and loads faster
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.muted = true;
-      const playPromise = videoRef.current.play();
+      // Reset video state on page reload
+      const handlePageReload = () => {
+        setIsLoaded(false);
+        setHasError(false);
+        setShowFallback(false);
+        setVideoKey(prevKey => prevKey + 1);
+      };
 
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // force play when blocked by browser
-          videoRef.current!.muted = true;
-          videoRef.current!.play().catch(() => { });
-        });
-      }
+      // Start with muted to ensure autoplay works
+      videoRef.current.muted = true;
+
+      // Handle user interaction to enable audio
+      const handleUserInteraction = () => {
+        if (videoRef.current) {
+          videoRef.current.muted = false;
+          // Remove the event listener after first interaction
+          window.removeEventListener('click', handleUserInteraction);
+          window.removeEventListener('keydown', handleUserInteraction);
+          window.removeEventListener('touchstart', handleUserInteraction);
+        }
+      };
+
+      // Add event listeners for user interaction
+      window.addEventListener('click', handleUserInteraction);
+      window.addEventListener('keydown', handleUserInteraction);
+      window.addEventListener('touchstart', handleUserInteraction);
+
+      // Listen for page visibility changes to handle reload
+      window.addEventListener('visibilitychange', handlePageReload);
+
+      // Cleanup event listeners on component unmount
+      return () => {
+        window.removeEventListener('click', handleUserInteraction);
+        window.removeEventListener('keydown', handleUserInteraction);
+        window.removeEventListener('touchstart', handleUserInteraction);
+        window.removeEventListener('visibilitychange', handlePageReload);
+      };
     }
-  }, []);
+  }, [videoKey]);
+
+  // Retry mechanism for failed video loading
+  useEffect(() => {
+    if (hasError && retryCount < 3) {
+      const retryTimeout = setTimeout(() => {
+        setHasError(false);
+        setShowFallback(false);
+        setIsLoaded(false);
+        setRetryCount(prev => prev + 1);
+        setVideoKey(prevKey => prevKey + 1);
+      }, 2000);
+
+      return () => clearTimeout(retryTimeout);
+    }
+  }, [hasError, retryCount]);
 
   return (
     <section className="relative w-full h-screen sm:h-screen md:h-screen lg:h-screen xl:h-screen min-h-[480px] sm:min-h-[520px] md:min-h-[560px] lg:min-h-[600px] xl:min-h-[640px] overflow-hidden flex flex-col justify-end">
@@ -60,22 +105,55 @@ export default function HeroOffer() {
 
         {/* HIGH PERFORMANCE VIDEO */}
         <video
+          key={videoKey}
           ref={videoRef}
           src={videoSrc}
           preload="auto"
           autoPlay
-          muted
           loop
           playsInline
-          className={`absolute inset-0 w-screen w-full sm:w-screen md:w-screen lg:w-screen xl:w-screen h-full object-contain transition-opacity duration-700 
-            ${isLoaded ? "opacity-80" : "opacity-0"}`}
-          onLoadedData={() => setIsLoaded(true)}
-          onError={() => setHasError(true)}
+          muted
+          poster="/Images/hero.webp"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700
+            ${isLoaded && !hasError ? "opacity-100" : "opacity-0"}`}
+          onLoadedData={() => {
+            setIsLoaded(true);
+            setHasError(false);
+          }}
+          onError={() => {
+            console.log("Video error occurred");
+            setHasError(true);
+          }}
+          onCanPlay={() => {
+            if (videoRef.current) {
+              const playPromise = videoRef.current.play();
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  console.log("Playback failed, but video should still be visible:", error);
+                  // Don't show fallback for autoplay prevention, just log it
+                });
+              }
+            }
+          }}
+          onPlaying={() => {
+            setIsLoaded(true);
+            setHasError(false);
+          }}
         />
 
         {/* Fallback shimmer while loading */}
         {!isLoaded && !hasError && (
           <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-red-900 to-yellow-900 animate-pulse" />
+        )}
+
+        {/* Error fallback */}
+        {hasError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-red-900 to-yellow-900 flex items-center justify-center">
+            <div className="text-white text-center p-4">
+              <p className="text-lg mb-2">Video failed to load</p>
+              <p className="text-sm">Retrying... ({retryCount}/3)</p>
+            </div>
+          </div>
         )}
       </div>
 

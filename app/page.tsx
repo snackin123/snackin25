@@ -21,18 +21,18 @@ export default function Home() {
           aria-hidden="true"
         />
       </nav>
-      <main className="flex-grow flex flex-col items-center">
+      <main className="flex-grow flex flex-col">
         {/* <HeroPage /> */}
-        <HeroOffer/>
-        <WhyChoose />
-        <HorizontalScrolling />
-        <EndPage />
-        <CustomerReviewsRibbon />
+        <div className="w-full">
+          <HeroOffer/>
+        </div>
+        <div className="flex flex-col items-center w-full">
+          <WhyChoose />
+          <HorizontalScrolling />
+          <EndPage />
+          <CustomerReviewsRibbon />
+        </div>
       </main>
     </div>
   );
 }
-
-
-
-
