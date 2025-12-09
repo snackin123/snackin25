@@ -52,113 +52,58 @@ export default function HeroOffer() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const [retry, setRetry] = useState(0);
 
   const videoSrc = "/promtional/Christmas Web Banner_2.mp4";
   const fallbackImage = "/promtional/Christmas Web Banner_2.jpg";
 
-  /* --------------------------- Autoplay silently --------------------------- */
+  /* -------------------------- Real Autoplay Logic -------------------------- */
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
+    // Required for autoplay on iOS
     video.muted = true;
-    video.play().catch(() => {});
-  }, [retry]);
+    video.playsInline = true;
+    video.setAttribute("webkit-playsinline", "true");
 
-  /* --------------------------- Retry on failure --------------------------- */
-  const handleRetry = () => {
-    if (retry >= 3) return;
-    setRetry((r) => r + 1);
-    setError(false);
-    setLoaded(false);
-  };
-
-  /* --------------------------- Unmute on interaction --------------------------- */
-  const enableSound = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // Only unmute if user has interacted with the page
-    if (typeof document !== 'undefined' && document.hasFocus()) {
-      video.muted = false;
-      video.play().catch(() => {
-        // If unmuted play fails, fall back to muted playback
-        video.muted = true;
-        video.play().catch(() => {});
-      });
-    }
-  };
-
-  /* --------------------------- Handle user interaction --------------------------- */
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      const video = videoRef.current;
-      if (video && video.muted) {
-        enableSound();
-        // Remove event listeners after first interaction
-        document.removeEventListener('click', handleUserInteraction);
-        document.removeEventListener('keydown', handleUserInteraction);
-        document.removeEventListener('touchstart', handleUserInteraction);
-      }
-    };
-
-    // Add event listeners for user interaction
-    document.addEventListener('click', handleUserInteraction);
-    document.addEventListener('keydown', handleUserInteraction);
-    document.addEventListener('touchstart', handleUserInteraction);
-
-    return () => {
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-    };
+    // Single autoplay attempt (Safari requires this)
+    video.play().catch(() => {
+      // If autoplay fails silently, do NOT retry or Safari will block it
+      console.log("Autoplay failed silently (expected on some devices).");
+    });
   }, []);
 
   return (
-    <section className="relative w-full min-h-[100dvh] flex flex-col justify-end overflow-hidden">
+    <section className="relative w-full min-h-[100dvh] overflow-hidden flex flex-col justify-end">
 
       {/* ------------------ VIDEO BACKGROUND ------------------ */}
-      <div
-        className="absolute inset-0 overflow-hidden"
-        onMouseEnter={enableSound}
-        onTouchEnd={enableSound}
-      >
-        {/* Blurred background fill */}
+      <div className="absolute inset-0 overflow-hidden">
+        
+        {/* Blurred background fill layer */}
         <img
           src={fallbackImage}
-          alt="blur background"
-          className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 z-0"
+          alt="background"
+          className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110"
         />
 
-        {/* Dark overlay */}
+        {/* Dark overlay for readability */}
         <div className="absolute inset-0 bg-black/50 z-[1]" />
 
-        {/* Main responsive video */}
+        {/* Main Video (autoplay-safe) */}
         <video
-          key={retry}
           ref={videoRef}
           src={videoSrc}
           preload="auto"
           loop
+          autoPlay
           muted
           playsInline
           webkit-playsinline="true"
           className={`absolute inset-0 w-full h-full object-contain sm:object-cover z-[2] transition-opacity duration-700 ${
-            loaded && !error ? "opacity-100" : "opacity-0"
+            loaded ? "opacity-100" : "opacity-0"
           }`}
           onLoadedData={() => setLoaded(true)}
-          onError={() => {
-            if (!error) {
-              setError(true);
-              handleRetry();
-            }
-          }}
-          onCanPlay={() => {
-            if (!loaded && !error) {
-              setLoaded(true);
-            }
-          }}
+          onError={() => setError(true)}
         />
 
         {/* Loading shimmer */}
@@ -170,8 +115,7 @@ export default function HeroOffer() {
         {error && (
           <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-red-900 to-yellow-900 flex items-center justify-center text-white z-[3]">
             <div className="text-center p-4">
-              <p className="text-lg mb-1">Video failed to load</p>
-              <p className="text-sm">Retrying… ({retry}/3)</p>
+              <p className="text-lg">Video failed to load</p>
             </div>
           </div>
         )}
