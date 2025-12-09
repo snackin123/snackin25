@@ -80,7 +80,7 @@ export default function HeroOffer() {
   return (
     <section className="relative w-full h-screen sm:h-screen md:h-screen lg:h-screen xl:h-screen min-h-[480px] sm:min-h-[520px] md:min-h-[560px] lg:min-h-[600px] xl:min-h-[640px] overflow-hidden flex flex-col justify-end">
       
-      {/* 🔮 Background & Overlay - Video plays on hover/touch (muted to comply with browser policies) */}
+      {/* 🔮 Background & Overlay - Video plays on hover/touch with optimized aspect ratio */}
       <div
         className="absolute inset-0"
         onMouseEnter={() => {
@@ -124,7 +124,7 @@ export default function HeroOffer() {
       >
         <div className="absolute inset-0 bg-black/60 z-0" />
 
-        {/* HIGH PERFORMANCE VIDEO - Plays on hover with clean display */}
+        {/* HIGH PERFORMANCE VIDEO - Stretched width to fill container */}
         <video
           key={videoKey}
           ref={videoRef}
@@ -132,7 +132,6 @@ export default function HeroOffer() {
           preload="auto"
           loop
           playsInline
-          muted
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700
             ${isLoaded && !hasError ? "opacity-100" : "opacity-0"}`}
           onLoadedData={() => {
