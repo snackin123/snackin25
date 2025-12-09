@@ -38,7 +38,7 @@ export default function HeroOffer() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const videoSrc = "/promtional/Christmas Web Banner_2.mp4";
 
-  // 🧊 Ensures video auto-plays on all devices and loads faster
+  // 🧊 Ensures video plays on hover with sound
   useEffect(() => {
     if (videoRef.current) {
       // Reset video state on page reload
@@ -49,33 +49,14 @@ export default function HeroOffer() {
         setVideoKey(prevKey => prevKey + 1);
       };
 
-      // Start with muted to ensure autoplay works
+      // Start with muted as fallback
       videoRef.current.muted = true;
-
-      // Handle user interaction to enable audio
-      const handleUserInteraction = () => {
-        if (videoRef.current) {
-          videoRef.current.muted = false;
-          // Remove the event listener after first interaction
-          window.removeEventListener('click', handleUserInteraction);
-          window.removeEventListener('keydown', handleUserInteraction);
-          window.removeEventListener('touchstart', handleUserInteraction);
-        }
-      };
-
-      // Add event listeners for user interaction
-      window.addEventListener('click', handleUserInteraction);
-      window.addEventListener('keydown', handleUserInteraction);
-      window.addEventListener('touchstart', handleUserInteraction);
 
       // Listen for page visibility changes to handle reload
       window.addEventListener('visibilitychange', handlePageReload);
 
       // Cleanup event listeners on component unmount
       return () => {
-        window.removeEventListener('click', handleUserInteraction);
-        window.removeEventListener('keydown', handleUserInteraction);
-        window.removeEventListener('touchstart', handleUserInteraction);
         window.removeEventListener('visibilitychange', handlePageReload);
       };
     }
@@ -99,21 +80,59 @@ export default function HeroOffer() {
   return (
     <section className="relative w-full h-screen sm:h-screen md:h-screen lg:h-screen xl:h-screen min-h-[480px] sm:min-h-[520px] md:min-h-[560px] lg:min-h-[600px] xl:min-h-[640px] overflow-hidden flex flex-col justify-end">
       
-      {/* 🔮 Background & Overlay */}
-      <div className="absolute inset-0">
+      {/* 🔮 Background & Overlay - Video plays on hover/touch (muted to comply with browser policies) */}
+      <div
+        className="absolute inset-0"
+        onMouseEnter={() => {
+          const videoElement = videoRef.current;
+          if (videoElement) {
+            try {
+              // Play video muted on hover (complies with autoplay policies)
+              videoElement.muted = true;
+              const playPromise = videoElement.play();
+
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  console.log("Muted playback on hover:", error);
+                });
+              }
+            } catch (error) {
+              console.log("Hover play failed:", error);
+            }
+          }
+        }}
+        onTouchStart={(e) => {
+          // Prevent default to avoid scrolling issues on mobile
+          e.preventDefault();
+          const videoElement = videoRef.current;
+          if (videoElement) {
+            try {
+              // Play video muted on touch (complies with autoplay policies)
+              videoElement.muted = true;
+              const playPromise = videoElement.play();
+
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  console.log("Muted playback on touch:", error);
+                });
+              }
+            } catch (error) {
+              console.log("Touch play failed:", error);
+            }
+          }
+        }}
+      >
         <div className="absolute inset-0 bg-black/60 z-0" />
 
-        {/* HIGH PERFORMANCE VIDEO */}
+        {/* HIGH PERFORMANCE VIDEO - Plays on hover with clean display */}
         <video
           key={videoKey}
           ref={videoRef}
           src={videoSrc}
           preload="auto"
-          autoPlay
           loop
           playsInline
           muted
-          poster="/Images/hero.webp"
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700
             ${isLoaded && !hasError ? "opacity-100" : "opacity-0"}`}
           onLoadedData={() => {
@@ -125,15 +144,8 @@ export default function HeroOffer() {
             setHasError(true);
           }}
           onCanPlay={() => {
-            if (videoRef.current) {
-              const playPromise = videoRef.current.play();
-              if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                  console.log("Playback failed, but video should still be visible:", error);
-                  // Don't show fallback for autoplay prevention, just log it
-                });
-              }
-            }
+            // Video is ready to play, but wait for hover
+            setIsLoaded(true);
           }}
           onPlaying={() => {
             setIsLoaded(true);
@@ -181,7 +193,7 @@ export default function HeroOffer() {
                 shadow-lg hover:bg-white/20 transition-all flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg italic"
             >
               <ChristmasPatternIcon type="snowflake" className="w-4 sm:w-5 h-4 sm:h-5" />
-              <span className="hidden sm:inline">Ring In the</span> Christmas Sale
+              <span className="hidden sm:inline">Ring In the Christmas Sale</span>
               <ChristmasPatternIcon type="snowflake" className="w-4 sm:w-5 h-4 sm:h-5" />
             </motion.button>
           </Link>
