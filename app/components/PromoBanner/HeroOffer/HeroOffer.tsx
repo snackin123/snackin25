@@ -67,7 +67,7 @@ export default function HeroOffer() {
           muted
           loop
           playsInline
-          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 
+          className={`absolute inset-0 w-screen w-full sm:w-screen md:w-screen lg:w-screen xl:w-screen h-full object-contain transition-opacity duration-700 
             ${isLoaded ? "opacity-80" : "opacity-0"}`}
           onLoadedData={() => setIsLoaded(true)}
           onError={() => setHasError(true)}
