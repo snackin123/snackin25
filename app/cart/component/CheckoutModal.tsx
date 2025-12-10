@@ -23,6 +23,7 @@ interface CheckoutModalProps {
   subtotal: number;
   discount: number;
   shipping: number;
+  christmasDiscount: number;
   finalTotal: number;
   couponState: ReturnType<typeof useCoupon>;
   setOrderPlaced: (placed: boolean) => void;
@@ -40,6 +41,7 @@ export const CheckoutModal = ({
   subtotal,
   discount,
   shipping,
+  christmasDiscount,
   finalTotal,
   couponState,
   setOrderPlaced,
@@ -153,6 +155,7 @@ export const CheckoutModal = ({
               subtotal={subtotal}
               discount={discount}
               shipping={shipping}
+              christmasDiscount={christmasDiscount}
               finalTotal={finalTotal}
               couponState={couponState}
               freeItems={freeItems}

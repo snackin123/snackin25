@@ -13,6 +13,7 @@ interface CheckoutSidebarProps {
   subtotal: number;
   discount: number;
   shipping: number;
+  christmasDiscount: number;
   finalTotal: number;
   couponState: ReturnType<typeof useCoupon>;
   freeItems?: string[];
@@ -23,6 +24,7 @@ export const CheckoutSidebar = ({
   subtotal,
   discount,
   shipping,
+  christmasDiscount,
   finalTotal,
   couponState,
   freeItems = [],
@@ -103,6 +105,12 @@ export const CheckoutSidebar = ({
         <div className="flex justify-between text-green-700 text-sm">
           <span>Discount</span>
           <span>-{formatPrice(discount)}</span>
+        </div>
+      )}
+      {christmasDiscount > 0 && (
+        <div className="flex justify-between text-green-700 text-sm">
+          <span>🎄 Christmas Discount</span>
+          <span>-{formatPrice(christmasDiscount)}</span>
         </div>
       )}
       <div className="flex justify-between text-xs text-gray-800">

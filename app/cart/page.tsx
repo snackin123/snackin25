@@ -49,8 +49,13 @@ export default function CartPage() {
     if (subtotal >= 250) {
       const christmasDiscountAmount = subtotal * 0.25;
       setChristmasDiscount(christmasDiscountAmount);
+      // Show notification for Christmas special when conditions are met
+      if (subtotal < 500) {
+        setShowFreeItemNotification(true);
+      }
     } else {
       setChristmasDiscount(0);
+      setShowFreeItemNotification(false);
     }
   }, [subtotal]);
 
@@ -165,7 +170,7 @@ export default function CartPage() {
               <PriceSummary
                 subtotal={subtotal}
                 shipping={shipping}
-                discount={discount + christmasDiscount}
+                discount={discount}
                 comboDiscount={comboDiscount}
                 finalTotal={finalTotal - christmasDiscount}
                 cartCount={cartCount}
@@ -181,26 +186,27 @@ export default function CartPage() {
         </div>
       </div>
       {showModal && (
-        <CheckoutModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          checkoutStep={checkoutStep}
-          setCheckoutStep={setCheckoutStep}
-          cartItems={deduplicatedCart}
-          subtotal={subtotal}
-          discount={discount + christmasDiscount}
-          shipping={shipping}
-          finalTotal={finalTotal - christmasDiscount}
-          couponState={couponState}
-          setOrderPlaced={setOrderPlaced}
-          setOrderDetails={setOrderDetails}
-          clearCart={clearCart}
-          freeItems={selectedFreeItems}
-        />
+              <CheckoutModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                checkoutStep={checkoutStep}
+                setCheckoutStep={setCheckoutStep}
+                cartItems={deduplicatedCart}
+                subtotal={subtotal}
+                discount={discount}
+                shipping={shipping}
+                christmasDiscount={christmasDiscount}
+                finalTotal={finalTotal - christmasDiscount}
+                couponState={couponState}
+                setOrderPlaced={setOrderPlaced}
+                setOrderDetails={setOrderDetails}
+                clearCart={clearCart}
+                freeItems={selectedFreeItems}
+              />
       )}
 
       {/* Christmas Special Notification */}
-      {subtotal >= 250 && subtotal < 500 && (
+      {showFreeItemNotification && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function TermsConditions() {
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-4xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="bg-white/5 rounded-lg p-8 shadow-lg">
         <h1 className="text-3xl font-bold mb-6 text-white">Terms & Conditions</h1>
         <p className="text-gray-300 mb-6">Last Updated: June 11, 2025</p>
@@ -16,7 +16,7 @@ export default function TermsConditions() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">1. Acceptance of Terms</h2>
             <p className="mb-4">
-              By accessing and using thesnackin.com ("Website"), you agree to be bound by these Terms and Conditions 
+              By accessing and using snackinofficial.com ("Website"), you agree to be bound by these Terms and Conditions 
               and our Privacy Policy. If you do not agree with any part of these terms, you must not use our Website.
             </p>
           </section>
@@ -79,7 +79,7 @@ export default function TermsConditions() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-white">8. Governing Law</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-white">8.Governing Law</h2>
             <p className="mb-4">
               These Terms shall be governed by and construed in accordance with the laws of India. Any disputes shall be subject 
               to the exclusive jurisdiction of the courts in [Your City], India.
@@ -89,7 +89,7 @@ export default function TermsConditions() {
           <section>
             <h2 className="text-2xl font-semibold mb-4 text-white">9. Contact Information</h2>
             <p className="mb-2">For any questions about these Terms, please contact us at:</p>
-            <p className="mb-2">Email: <a href="mailto:hello@snackinofficial.com" className="text-orange-400 hover:underline">legal@snackinofficial.com</a></p>
+            <p className="mb-2">Email: <a href="mailto:hello@snackinofficial.com" className="text-orange-400 hover:underline">hello@snackinofficial.com</a></p>
             <p>Phone: +91 90286-54048</p>
           </section>
         </div>

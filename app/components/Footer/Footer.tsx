@@ -25,21 +25,40 @@ export default function Footer() {
 
         {/* Contact Info */}
         <div className="flex flex-wrap justify-center items-center gap-6 mt-4 text-gray-300">
-          <a 
-            href="mailto:hello@snackinofficial.com" 
+          <a
+            href="mailto:hello@snackinofficial.com"
             className="flex items-center gap-2 hover:text-amber-400 transition-colors"
             aria-label="Email us"
           >
             <FaEnvelope className="w-4 h-4" />
             <span className="text-sm">hello@snackinofficial.com</span>
           </a>
-          <a 
-            href="tel:+919028654048" 
+          <a
+            href="tel:+919028654048"
             className="flex items-center gap-2 hover:text-amber-400 transition-colors"
             aria-label="Call us"
           >
             <FaPhone className="w-4 h-4" />
             <span className="text-sm">+91 90286-54048</span>
+          </a>
+        </div>
+
+        {/* Legal Links */}
+        <div className="flex flex-wrap justify-center items-center gap-4 mt-2 text-xs text-gray-400">
+          <a
+            href="/terms-conditions"
+            className="hover:text-amber-400 transition-colors"
+            aria-label="Terms of Service"
+          >
+            Terms of Service
+          </a>
+          <span>•</span>
+          <a
+            href="/privacy-policy"
+            className="hover:text-amber-400 transition-colors"
+            aria-label="Privacy Policy"
+          >
+            Privacy Policy
           </a>
         </div>
 

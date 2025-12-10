@@ -96,7 +96,6 @@ export default function HeroOffer() {
           preload="auto"
           loop
           autoPlay
-          muted
           playsInline
           webkit-playsinline="true"
           className={`absolute inset-0 w-full h-full object-contain sm:object-cover z-[2] transition-opacity duration-700 ${

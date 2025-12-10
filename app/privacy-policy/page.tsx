@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-4xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="bg-white/5 rounded-lg p-8 shadow-lg">
         <h1 className="text-3xl font-bold mb-6 text-white">Privacy Policy</h1>
         <p className="text-gray-300 mb-6">Last Updated: June 11, 2025</p>
@@ -60,7 +60,7 @@ export default function PrivacyPolicy() {
             <p className="mb-4">
               If you have any questions about this Privacy Policy, please contact us at:
             </p>
-            <p className="mb-2">Email: <a href="mailto:privacy@snackinofficial.com" className="text-orange-400 hover:underline">privacy@snackinofficial.com</a></p>
+            <p className="mb-2">Email: <a href="mailto:privacy@snackinofficial.com" className="text-orange-400 hover:underline">info.snackin@gmail.com</a></p>
             <p>Phone: +91 90286-54048</p>
           </section>
         </div>

@@ -153,7 +153,7 @@ export const SpecialOfferBanner = ({
 
       {/* SUBTEXT */}
       <p className="text-center text-white/85 max-w-xl mx-auto text-sm sm:text-base mb-8">
-        A little Christmas gift from us to you — save big this festive season!
+        A little Christmas gift from us to you save big this festive season!
       </p>
 
       {/* OFFER LOGIC */}
