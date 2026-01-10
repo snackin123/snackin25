@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import React, { useState, useRef, useEffect, memo } from "react";
@@ -80,10 +81,12 @@ export default function HeroOffer() {
       <div className="absolute inset-0 overflow-hidden">
         
         {/* Blurred background fill layer */}
-        <img
+        <Image
           src={fallbackImage}
           alt="background"
-          className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110"
+          fill
+          className="object-cover blur-2xl scale-110"
+          priority
         />
 
         {/* Dark overlay for readability */}

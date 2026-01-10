@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 
+export const dynamic = 'force-dynamic';
+
 // Rate limiting configuration
 const RATE_LIMIT = {
   WINDOW_MS: 60 * 1000, // 1 minute

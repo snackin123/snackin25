@@ -97,9 +97,9 @@ const ProductsContent = () => {
   return (
     <div className="bg-[#FFFDF9] min-h-screen py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-10">
+        {/* <div className="mb-10">
           <DiwaliPromoBanner />
-        </div>
+        </div> */}
 
         <h1 className="text-4xl font-extrabold text-center mb-12 text-red-900">
           Our Products

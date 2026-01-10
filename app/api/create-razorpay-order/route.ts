@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
+export const dynamic = 'force-dynamic';
+
 let razorpay: Razorpay | null = null;
 
 if (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {

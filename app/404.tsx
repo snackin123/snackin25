@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Custom404() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center bg-gray-100 p-6">
@@ -7,24 +9,24 @@ export default function Custom404() {
       </p>
       <ul className="space-y-3">
         <li>
-          <a href="/" className="text-blue-600 hover:underline">
+          <Link href="/" className="text-blue-600 hover:underline">
             Home
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/Our-Story" className="text-blue-600 hover:underline">
+          <Link href="/Our-Story" className="text-blue-600 hover:underline">
             Our Story
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/products" className="text-blue-600 hover:underline">
+          <Link href="/products" className="text-blue-600 hover:underline">
             Products
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/contact-us" className="text-blue-600 hover:underline">
+          <Link href="/contact-us" className="text-blue-600 hover:underline">
             Contact Us
-          </a>
+          </Link>
         </li>
       </ul>
     </div>

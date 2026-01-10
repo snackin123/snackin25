@@ -1,11 +1,7 @@
 import { NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
 import crypto from 'crypto';
 
-const razorpay = new Razorpay({
-  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {

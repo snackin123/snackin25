@@ -44,19 +44,10 @@ export default function CartPage() {
   } = useCartCalculations(cart, cartCount);
   const couponState = useCoupon(subtotal);
 
-  // Apply Christmas Special: 25% OFF on ₹250+ orders
+  // Apply Christmas Special: 25% OFF on ₹250+ orders (DISABLED)
   useEffect(() => {
-    if (subtotal >= 250) {
-      const christmasDiscountAmount = subtotal * 0.25;
-      setChristmasDiscount(christmasDiscountAmount);
-      // Show notification for Christmas special when conditions are met
-      if (subtotal < 500) {
-        setShowFreeItemNotification(true);
-      }
-    } else {
-      setChristmasDiscount(0);
-      setShowFreeItemNotification(false);
-    }
+    setChristmasDiscount(0);
+    setShowFreeItemNotification(false);
   }, [subtotal]);
 
   useEffect(() => {
@@ -110,13 +101,11 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-[#FFFDF9] pt-24 px-4 sm:px-6 lg:px-8 pb-12">
       <div className="max-w-6xl mx-auto">
-        {/* Christmas Special Banner */}
-        {subtotal >= 250 && (
+        {/* Christmas Special Banner (DISABLED) */}
+        {/* {subtotal >= 250 && (
           <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl bg-gradient-to-b from-[#0d1117] via-[#14212e] to-[#0d1117] text-white py-8 sm:py-10 px-6 sm:px-10 mb-6">
-            {/* GLOW */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_70%)]"></div>
 
-            {/* LABEL */}
             <div className="text-blue-200/90 uppercase tracking-widest text-xs sm:text-sm mb-4 text-center relative z-10">
               <div className="flex justify-center items-center gap-2">
                 <Snowflake className="w-4 h-4" />
@@ -125,7 +114,6 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* TITLE */}
             <h3 className="text-center text-2xl sm:text-3xl font-bold mb-2 relative z-10">
               <span>🎄 Enjoy Christmas Savings</span>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200">
@@ -137,7 +125,7 @@ export default function CartPage() {
               A little Christmas gift from us to you — save big this festive season!
             </p>
           </div>
-        )}
+        )} */}
 
         <h1 className="text-3xl font-bold mb-10 text-center text-red-900 mt-6">Your Shopping Cart</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -161,11 +149,12 @@ export default function CartPage() {
             </div>
           </div>
           <div className="lg:col-span-1 space-y-4 sticky top-28">
-            <SpecialOfferBanner
+            {/* SpecialOfferBanner (DISABLED) */}
+            {/* <SpecialOfferBanner
               itemCount={cartCount}
               minPacketsForDiscount={2}
               onFreeItemsSelected={handleFreeItemsSelected}
-            />
+            /> */}
             <div className="lg:col-span-1">
               <PriceSummary
                 subtotal={subtotal}
@@ -205,8 +194,8 @@ export default function CartPage() {
               />
       )}
 
-      {/* Christmas Special Notification */}
-      {showFreeItemNotification && (
+      {/* Christmas Special Notification (DISABLED) */}
+      {/* {showFreeItemNotification && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -236,7 +225,7 @@ export default function CartPage() {
             </button>
           </div>
         </motion.div>
-      )}
+      )} */}
     </div>
   );
 }

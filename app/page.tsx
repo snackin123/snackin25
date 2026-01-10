@@ -22,10 +22,7 @@ export default function Home() {
         />
       </nav>
       <main className="flex-grow flex flex-col">
-        {/* <HeroPage /> */}
-        <div className="w-full">
-          <HeroOffer/>
-        </div>
+        <HeroPage />
         <div className="flex flex-col items-center w-full">
           <WhyChoose />
           <HorizontalScrolling />

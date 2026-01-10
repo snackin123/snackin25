@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
+export const dynamic = 'force-dynamic';
+
 // Initialize Razorpay only if environment variables are available
 let razorpay: Razorpay | null = null;
 

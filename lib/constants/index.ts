@@ -5,7 +5,7 @@ const CART = {
   
   // Combo offer (Black Friday Mega Sale - Buy 2 Get 2 Free, mandatory 2 items)
   COMBO_OFFER: {
-    ACTIVE: true,
+    ACTIVE: false,
     MIN_ITEMS: 2, // Mandatory minimum 2 items to activate Buy 2 Get 2 Free
     DISCOUNT_AMOUNT: 0, // Free items instead of discount
     FREE_ITEMS: 0, // Calculated as min(2, floor(totalItems/2))
