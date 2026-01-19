@@ -11,6 +11,7 @@ import ClientLayout from "./ClientLayout";
 import { CartProvider } from "@/lib/cart-context";
 import { ReactNode } from 'react';
 import GoogleAnalytics from "@/app/components/GoogleAnalytics";
+import MarketingPopup from "@/app/components/MarketingPopup/MarketingPopup";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <ClientLayout>
             {children}
           </ClientLayout>
+          <MarketingPopup /> {/* Add the marketing popup here */}
         </CartProvider>
       </body>
     </html>

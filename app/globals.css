@@ -38,6 +38,21 @@ body {
     animation: marquee 20s linear infinite;
   }
 
+@keyframes rainbow-background {
+  0% { background-color: #FF0000; } /* Red */
+  14% { background-color: #FF7F00; } /* Orange */
+  28% { background-color: #FFFF00; } /* Yellow */
+  42% { background-color: #00FF00; } /* Green */
+  56% { background-color: #0000FF; } /* Blue */
+  70% { background-color: #4B0082; } /* Indigo */
+  84% { background-color: #9400D3; } /* Violet */
+  100% { background-color: #FF0000; } /* Back to Red */
+}
+
+.animate-rainbow {
+  animation: rainbow-background 5s linear infinite;
+}
+
 
 
 
