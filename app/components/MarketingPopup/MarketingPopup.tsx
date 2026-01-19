@@ -10,7 +10,7 @@ const MarketingPopup: React.FC = () => {
           Something Exciting is Coming!
         </h2>
         <p className="text-base md:text-lg mb-4 font-medium leading-relaxed text-gray-800">
-          The Snackin' Company is preparing a delightful surprise.
+          The Snackin' Team is preparing a delightful surprise.
           Get ready for an even better experience!
         </p>
         <p className="text-sm text-gray-700">
